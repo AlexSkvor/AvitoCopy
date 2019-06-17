@@ -1,3 +1,27 @@
-body{
-    background-color: rgb(230, 230, 230);
+
+ body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    font-variant-ligatures: none;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fafafa;
+ }
+ body::before,
+ body::after {
+   content: "";
+   display: table;
+   clear: both;
+ }
+ body * {
+   box-sizing: inherit;
+ }
+
+h1,p{
+    font-family: "Roboto";
+    margin: 0; 
+    padding: 0;
 }

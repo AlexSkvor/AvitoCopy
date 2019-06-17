@@ -15,6 +15,7 @@ function ProductsTable(){
                                                                driveUnit={product.driveUnit}
                                                                steeringWheel={product.steeringWheel}
                                                                mileage = {product.mileage}
+                                                               contact = {product.contact}
                                                             /> 
                                             )
     

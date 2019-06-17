@@ -5,4 +5,6 @@ import "./search-string-style.css"
 import "./products-style.css"
 import "./app-style.css"
 import "./main.css"
+import "./card-style.css"
+import "./showMore-btn.css"
 ReactDOM.render(<App/>,document.getElementById("root"))
