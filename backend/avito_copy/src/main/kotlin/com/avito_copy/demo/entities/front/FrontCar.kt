@@ -9,7 +9,7 @@ data class FrontCar(
         val id: String,
         val imageUrl: String = "",
         val tradeMark: String = "",
-        val mode: String = "",
+        val model: String = "",
         val color: String = "",
         val rearDrive: String = "",
         val price: String = "",
