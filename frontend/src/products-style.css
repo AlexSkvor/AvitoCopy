@@ -1,0 +1,38 @@
+.product-style{
+    background-color: rgb(255, 255, 255);
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 170px;
+    height: 250px;
+    padding: 0;
+    margin-right:30px;
+    
+}
+
+.product-style img{
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    height: 50%;
+    margin: 0;
+}
+
+.product-style h1{
+    font-size: 15px;
+    margin: 0;
+}
+
+.product-style p{
+    font-family: sans-serif;
+    font-size: 12px;
+    margin: 0;
+}
+
+.table-style{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+

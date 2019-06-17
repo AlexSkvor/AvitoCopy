@@ -1,0 +1,15 @@
+.search-string{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    margin-top: 5%;
+}
+
+.search-holder{
+    display: flexbox;
+    margin: 30px;
+}
+/* !!Артему!! Не забудь потом стилизовать Input*/
