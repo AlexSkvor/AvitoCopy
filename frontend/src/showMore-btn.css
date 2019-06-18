@@ -1,0 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Lora|Roboto:400,500);
+
+.showMore-holder{
+    display: flex;
+    height:40px;
+    width: 30%;
+    margin: 20px;
+    
+}
+
+.showMore-btn{
+    width: 100%;
+}
+
+.showMore-btn p{
+    font-family: "Lora";
+}
