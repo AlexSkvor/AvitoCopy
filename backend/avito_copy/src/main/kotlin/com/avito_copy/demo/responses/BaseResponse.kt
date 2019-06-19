@@ -5,7 +5,7 @@ package com.avito_copy.demo.responses
  * @author AlexSkvor
  * */
 
-class BaseResponse<T>(status: String, code: Int, data: Array<T>, size: Int = 0, message: String? = null) {
+class BaseResponse<T>(status: String, code: Int, data: Array<T>, size: Int = 0, message: String = "") {
 
     var status: String = status
         private set
@@ -16,7 +16,7 @@ class BaseResponse<T>(status: String, code: Int, data: Array<T>, size: Int = 0, 
     var data: Array<T> = data
         private set
 
-    var message: String? = message
+    var message: String = message
         private set
 
     val size: Int

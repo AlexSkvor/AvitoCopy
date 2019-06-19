@@ -5,10 +5,7 @@ import com.avito_copy.demo.entities.front.FrontCarMapper
 import com.avito_copy.demo.responses.BaseResponse
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * Created on 6/17/2019
@@ -24,20 +21,23 @@ class FrontCarController {
         const val STATUS_ERROR = "error"
         const val CODE_SUCCESS = 200
         const val BAD_REQUEST = 400
-
     }
 
     @GetMapping("/avito")
+    @ResponseBody
     fun getAvitoCarsList(
             @RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
             @RequestParam(value = "radius", required = false, defaultValue = "0") radius: Int): BaseResponse<FrontCar> {
         val take = skip + 3
+        if (take > 40) return BaseResponse(STATUS_ERROR, BAD_REQUEST, data = arrayOf(),
+                message = "you skipped too much!")
         val pageNumber = getPageNumber(skip, take)
         checkPageNumber(pageNumber)?.let { return it }
         checkRadius(radius)?.let { return it }
         val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=$pageNumber&radius=$radius&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
         val elements: Elements = page.body().getElementsByClass("js-item-slider item-slider")
         val links: List<String> = elements.filter { it.hasAttr("href") }.map { it.attr("href") }
+
         val data = links.subList(skip, take).map { carFromLink(it) }.toTypedArray()
 
         for (i in 0 until data.size)
@@ -47,7 +47,8 @@ class FrontCarController {
     }
 
     private fun carFromLink(link: String): FrontCar {
-        val page = Jsoup.connect("https://www.avito.ru$link").get()
+        val url = "https://www.avito.ru$link"
+        val page = Jsoup.connect(url).get()
         val itemParams: Elements = page.body().getElementsByClass("item-params-list-item")
         val valuesList: Map<String, String> =
                 itemParams.map {
@@ -58,7 +59,15 @@ class FrontCarController {
         val image = page.toString().substringAfter("avito.item.image = ")
                 .substringBefore(";").replace("'", "")
 
-        return FrontCarMapper.fromMap(valuesList, price, image)//TODO convert into car Entity!!!
+        val comment = page.body().getElementsByClass("item-description").text()
+
+        val advanced: Map<String, List<String>> = page.body().getElementsByClass("advanced-params-param").toList()
+                .map {
+                    it.getElementsByClass("advanced-params-param-title").text() to it.getElementsByClass("advanced-params-param-item")
+                            .toList().map { attr -> attr.text() }
+                }.toMap()
+
+        return FrontCarMapper.fromMap(valuesList, price, image, comment, advanced, url)//TODO convert into car Entity!!!
     }
 
     private fun checkPageNumber(number: Int): BaseResponse<FrontCar>? {
