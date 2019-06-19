@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
+
 /**
  * Created on 6/17/2019
  * @author AlexSkvor
@@ -13,5 +14,5 @@ import org.springframework.web.bind.annotation.ResponseBody
 class ExampleController {
     @RequestMapping("/")
     @ResponseBody
-    fun hello() = "Hello world mufucka"
+    fun hello() = "Hello!\nAdd \"generatedCars\" to your path to see some cars"
 }

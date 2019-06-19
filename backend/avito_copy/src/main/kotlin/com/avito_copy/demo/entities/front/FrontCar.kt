@@ -11,7 +11,7 @@ data class FrontCar(
         val tradeMark: String = "",
         val model: String = "",
         val color: String = "",
-        val rearDrive: String = "",
+        val driveUnit: String = "",
         val price: String = "",
         val year: String = "",
         val bodyType: String = "",
