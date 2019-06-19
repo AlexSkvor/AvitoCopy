@@ -1,6 +1,5 @@
 import React from "react"
 
-
 function SearchString(){
     return(
         <div className="search-string">

@@ -8,7 +8,10 @@
     font-variant-ligatures: none;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
-    background-color: #fafafa;
+    background-size: cover;
+    background: fixed url(picture/shattered-island.gif);
+    background-position: center;
+    
  }
  body::before,
  body::after {
