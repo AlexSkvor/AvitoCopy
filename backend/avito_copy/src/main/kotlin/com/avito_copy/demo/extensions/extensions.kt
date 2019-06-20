@@ -27,7 +27,7 @@ fun String.lessEqualsThen(num: Int): Boolean {
     return try {
         this.filterDigits().toInt() <= num
     } catch (e: Exception) {
-        println(e)
+        println("lessEqualsThen $e")
         false
     }
 }
@@ -36,7 +36,7 @@ fun String.biggerEqualsThen(num: Int): Boolean {
     return try {
         this.filterDigits().toInt() >= num
     } catch (e: Exception) {
-        println(e)
+        println("biggerEqualsThen $e")
         false
     }
 }

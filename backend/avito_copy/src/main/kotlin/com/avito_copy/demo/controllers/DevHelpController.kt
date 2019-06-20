@@ -25,6 +25,7 @@ class DevHelpController {
         instructions += "devApi/help/ -> Сейчас Вы здесь!<br>"
         instructions += "devApi/info/cars/count -> Количество машин, загруженных в базу данных <a href = http://84.201.139.189:8080/devApi/info/cars/count>Пример</a> <br>"
         instructions += "devApi/info/cars/tradeMarks -> Все возможные торговые марки машин <a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Пример</a><br>"
+        instructions += "devApi/info/cars/colors -> Все возможные цвета машин <a href = http://84.201.139.189:8080/devApi/info/cars/colors>Пример</a><br>"
         instructions += "devApi/search/cars -> сложный запрос, <a href = http://84.201.139.189:8080/devApi/help/requests/search/cars>Подробности</a><br>"
         return instructions
     }
@@ -50,6 +51,11 @@ class DevHelpController {
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?tradeMarks=Audi&tradeMarks=BMW>Пример</a><br>"
+        instructions += "${bt}colors: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/colors или не задан, возможно задание нескольких значений одновременно)<br>" +
+                "${bt}${bt}${bt}Описание(Выдавать в ответе машины указаных цветов)<br>" +
+                "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
+                "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
+                "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?colors=чёрный&colors=розовый>Пример</a><br>"
         instructions += "${bt}minPrice: <br>${bt}${bt}${bt}Валидация(Целое число)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины ценой большей или равной minPrice)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +

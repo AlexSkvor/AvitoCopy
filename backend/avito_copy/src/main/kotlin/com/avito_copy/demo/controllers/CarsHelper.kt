@@ -24,4 +24,13 @@ object CarsHelper {
         }
     }
 
+    fun getPossibleColors(): List<String> {
+        return try {
+            File("allColors.txt").readLines()
+        } catch (e: Exception) {
+            println("Tried to reed colors from file $e")
+            listOf()
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.avito_copy.demo.controllers
 
 import com.avito_copy.demo.controllers.CarsHelper.getCars
+import com.avito_copy.demo.controllers.CarsHelper.getPossibleColors
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleMarks
 import com.avito_copy.demo.entities.front.FrontCar
 import com.avito_copy.demo.extensions.biggerEqualsThen
@@ -27,20 +28,23 @@ class SearchController {
     fun searchCars(@RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
                    @RequestParam(value = "take", required = false, defaultValue = "3") take: Int,
                    @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
+                   @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
                    @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int,
                    @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int
     ): BaseResponse<FrontCar> {
         //TODO сортировка по уменьш/увел цены
-        //TODO фильтр по цвету, типу кузова
+        //TODO фильтр по типу кузова
         val cars = getCars()
         if (cars.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf())
 
         validateTradeMarks(tradeMarks)?.let { return it }
+        validateColors(colors)?.let { return it }
 
         val temp = cars.asSequence()
                 .filter { tradeMarksFilter(it, tradeMarks) }
+                .filter { colorsFilter(it, colors) }
                 .filter { it.price.biggerEqualsThen(minPrice) }
                 .filter { it.price.lessEqualsThen(maxPrice) }
                 .filter { it.year.biggerEqualsThen(minYear) }
@@ -61,11 +65,23 @@ class SearchController {
         val permitted = getPossibleMarks()
         val bad = marks.filter { !permitted.contains(it) }
         return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "search/cars/tradeMarks"))
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/tradeMarks"))
+    }
+
+    private fun validateColors(colors: Array<String>): BaseResponse<FrontCar>? {
+        if (colors.isEmpty()) return null
+        val permitted = getPossibleColors()
+        val bad = colors.filter { !permitted.contains(it) }
+        return if (bad.isEmpty()) null
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/colors"))
     }
 
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {
-        return marks.isEmpty() || marks.contains(car.tradeMark.trim())
+        return marks.isEmpty() || marks.contains(car.tradeMark)
+    }
+
+    private fun colorsFilter(car: FrontCar, colors: Array<String>): Boolean {
+        return colors.isEmpty() || colors.contains(car.color)
     }
 
     private fun Array<FrontCar>.setIds() {

@@ -1,6 +1,7 @@
 package com.avito_copy.demo.controllers
 
 import com.avito_copy.demo.controllers.CarsHelper.getCars
+import com.avito_copy.demo.controllers.CarsHelper.getPossibleColors
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleMarks
 import com.avito_copy.demo.responses.BaseResponse
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,6 +26,12 @@ class InfoController {
     @GetMapping("/cars/tradeMarks")
     fun getTradeMarksList(): BaseResponse<String> {
         val data = getPossibleMarks().toTypedArray()
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
+    }
+
+    @GetMapping("/cars/colors")
+    fun getColorsList(): BaseResponse<String> {
+        val data = getPossibleColors().toTypedArray()
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
     }
 }
