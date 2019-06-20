@@ -1,6 +1,8 @@
 package com.avito_copy.demo.controllers
 
 import com.avito_copy.demo.entities.front.FrontCar
+import com.avito_copy.demo.extensions.biggerEqualsThen
+import com.avito_copy.demo.extensions.lessEqualsThen
 import com.avito_copy.demo.extensions.withSkipTake
 import com.avito_copy.demo.extensions.wrongArguments
 import com.avito_copy.demo.responses.BaseResponse
@@ -26,7 +28,9 @@ class SearchController {
     @GetMapping("/cars")
     fun searchCars(@RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
                    @RequestParam(value = "take", required = false, defaultValue = "3") take: Int,
-                   @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>
+                   @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
+                   @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
+                   @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int
     ): BaseResponse<FrontCar> {
 
         val cars = getCars()
@@ -34,16 +38,17 @@ class SearchController {
 
         validateTradeMarks(tradeMarks)?.let { return it }
 
-        val temp = cars.distinct()
+        val temp = cars
                 .filter { tradeMarksFilter(it, tradeMarks) }
+                .filter { it.price.biggerEqualsThen(minPrice) }
+                .filter { it.price.lessEqualsThen(maxPrice) }
                 .distinct()
 
         val medianCost = middleCost(temp)
-        val data = temp
-                .withSkipTake(skip, take)
-                .toTypedArray()
 
+        val data = temp.withSkipTake(skip, take).toTypedArray()
         data.setIds()
+
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, medianCost = medianCost)
     }
 
@@ -92,7 +97,11 @@ class SearchController {
     private fun middleCost(cars: List<FrontCar>): Int {
         if (cars.isEmpty()) return 0
         var sum = 0
-        cars.forEach { sum += it.price.toInt() }
-        return sum / cars.size
+        return try {
+            cars.forEach { sum += it.price.toInt() }
+            sum / cars.size
+        } catch (e: Exception) {
+            -1
+        }
     }
 }
