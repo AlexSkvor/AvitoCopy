@@ -30,7 +30,9 @@ class SearchController {
                    @RequestParam(value = "take", required = false, defaultValue = "3") take: Int,
                    @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
                    @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
-                   @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int
+                   @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int,
+                   @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
+                   @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int
     ): BaseResponse<FrontCar> {
 
         val cars = getCars()
@@ -38,11 +40,14 @@ class SearchController {
 
         validateTradeMarks(tradeMarks)?.let { return it }
 
-        val temp = cars
+        val temp = cars.asSequence()
                 .filter { tradeMarksFilter(it, tradeMarks) }
                 .filter { it.price.biggerEqualsThen(minPrice) }
                 .filter { it.price.lessEqualsThen(maxPrice) }
+                .filter { it.year.biggerEqualsThen(minYear) }
+                .filter { it.year.lessEqualsThen(maxYear) }
                 .distinct()
+                .toList()
 
         val medianCost = middleCost(temp)
 
@@ -53,6 +58,7 @@ class SearchController {
     }
 
     private fun validateTradeMarks(marks: Array<String>): BaseResponse<FrontCar>? {
+        if (marks.isEmpty()) return null
         val permitted = getPossibleMarks()
         val bad = marks.filter { !permitted.contains(it) }
         return if (bad.isEmpty()) null
@@ -60,7 +66,7 @@ class SearchController {
     }
 
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {
-        return marks.contains(car.tradeMark.trim())
+        return marks.isEmpty() || marks.contains(car.tradeMark.trim())
     }
 
     @GetMapping("/cars/tradeMarks")
