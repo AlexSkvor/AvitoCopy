@@ -33,4 +33,12 @@ object CarsHelper {
         }
     }
 
+    fun getPossibleBodyTypes(): List<String> {
+        return try {
+            File("allBodyTypes.txt").readLines()
+        } catch (e: Exception) {
+            println("Tried to reed colors from file $e")
+            listOf()
+        }
+    }
 }

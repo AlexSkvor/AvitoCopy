@@ -56,6 +56,11 @@ class DevHelpController {
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?colors=чёрный&colors=розовый>Пример</a><br>"
+        instructions += "${bt}bodyTypes: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/bodyTypes или не задан, возможно задание нескольких значений одновременно)<br>" +
+                "${bt}${bt}${bt}Описание(Выдавать в ответе машины, имеющие один из заданных типов кузова)<br>" +
+                "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
+                "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
+                "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?bodyTypes=купе&bodyTypes=микроавтобус>Пример</a><br>"
         instructions += "${bt}minPrice: <br>${bt}${bt}${bt}Валидация(Целое число)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины ценой большей или равной minPrice)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +

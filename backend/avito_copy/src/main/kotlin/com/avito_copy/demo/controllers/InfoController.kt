@@ -1,6 +1,7 @@
 package com.avito_copy.demo.controllers
 
 import com.avito_copy.demo.controllers.CarsHelper.getCars
+import com.avito_copy.demo.controllers.CarsHelper.getPossibleBodyTypes
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleColors
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleMarks
 import com.avito_copy.demo.responses.BaseResponse
@@ -32,6 +33,12 @@ class InfoController {
     @GetMapping("/cars/colors")
     fun getColorsList(): BaseResponse<String> {
         val data = getPossibleColors().toTypedArray()
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
+    }
+
+    @GetMapping("/cars/bodyTypes")
+    fun getBodyTypesList(): BaseResponse<String> {
+        val data = getPossibleBodyTypes().toTypedArray()
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
     }
 }
