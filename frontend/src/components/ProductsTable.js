@@ -11,7 +11,9 @@ class ProductsTable extends React.Component{
         }
         //////////////////////////////////////////
         this.addItem = this.addItem.bind(this)
-        //////////////////////////////////////////  
+        ////////////////////////////////////////// 
+
+        ///////////////////////////////////////////////////
         for(let key in this.state.dataBase[0]){
             this.state.newData[0][key] = this.state.dataBase[0][key]
         }
@@ -41,7 +43,7 @@ class ProductsTable extends React.Component{
         return(
             <div className="table-style">
                 <div className="table-style"> 
-                    {this.state.newData.map(product => <Product key={product.id} imgURL={product.imgURL} mark={product.mark} model={product.model} color={product.color} engineCapacity={product.engineCapacity} price={product.price} year={product.year} carBody={product.carBody} driveUnit={product.driveUnit} steeringWheel={product.steeringWheel} mileage = {product.mileage} contact = {product.contact} /> )}
+                    {this.state.newData.map(product => <Product key={product.id} imageUrl={product.imageUrl} watchPlace={product.additionalInfo.watchPlace} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} condition = {product.additionalInfo.condition} transmission={product.additionalInfo.transmission} ptsOwners={product.additionalInfo.ptsOwners} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
                 </div>
                 <div className="showMore-holder">
                     <button onClick={this.addItem} className="showMore-btn" ><p>Показать еще обьявления</p></button>
