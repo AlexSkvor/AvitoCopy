@@ -22,7 +22,7 @@ class DevHelpController {
     fun allRequestsDocs(): String {
         var instructions = ""
         instructions += "Методы API:<br>"
-        instructions += "devApi/help/request -> Сейчас Вы здесь!<br>"
+        instructions += "devApi/help/ -> Сейчас Вы здесь!<br>"
         instructions += "devApi/info/cars/count -> Количество машин, загруженных в базу данных <a href = http://84.201.139.189:8080/devApi/info/cars/count>Пример</a> <br>"
         instructions += "devApi/info/cars/tradeMarks -> Все возможные торговые марки машин <a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Пример</a><br>"
         instructions += "devApi/search/cars -> сложный запрос, <a href = http://84.201.139.189:8080/devApi/help/requests/search/cars>Подробности</a><br>"
@@ -72,7 +72,7 @@ class DevHelpController {
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?maxYear=2000>Пример</a><br>"
 
 
-        instructions += "<a href = http://84.201.139.189:8080/devApi/help/request>Вернуться к списку API</a>"
+        instructions += "<a href = http://84.201.139.189:8080/devApi/help/>Вернуться к списку API</a>"
         return instructions
     }
 }

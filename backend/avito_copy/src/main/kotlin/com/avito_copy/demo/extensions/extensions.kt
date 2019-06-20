@@ -11,6 +11,10 @@ fun <T> List<T>.withSkipTake(skip: Int, take: Int): List<T> {
     }
 }
 
+fun String.filterDigits(): String =
+        this.filter { it in '0'..'9' }
+
+
 fun wrongArguments(contained: List<*>, seePermitted: String): String {
     return "your request contained wrong arguments $contained\n you can see permitted with $seePermitted"
 }
@@ -21,7 +25,7 @@ fun String?.antiSpace() =
 
 fun String.lessEqualsThen(num: Int): Boolean {
     return try {
-        this.toInt() <= num
+        this.filterDigits().toInt() <= num
     } catch (e: Exception) {
         println(e)
         false
@@ -30,7 +34,7 @@ fun String.lessEqualsThen(num: Int): Boolean {
 
 fun String.biggerEqualsThen(num: Int): Boolean {
     return try {
-        this.toInt() >= num
+        this.filterDigits().toInt() >= num
     } catch (e: Exception) {
         println(e)
         false
