@@ -21,7 +21,7 @@ class InfoController {
 
     @GetMapping("/cars/count")
     fun getTotalMarksNumber(): BaseResponse<Int> {
-        val carsNumber = getCars().distinct().size
+        val carsNumber = getCars().size
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsNumber))
     }
 

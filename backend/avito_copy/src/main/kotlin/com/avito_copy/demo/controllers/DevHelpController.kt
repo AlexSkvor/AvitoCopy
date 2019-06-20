@@ -26,6 +26,8 @@ class DevHelpController {
         instructions += "devApi/info/cars/count -> Количество машин, загруженных в базу данных <a href = http://84.201.139.189:8080/devApi/info/cars/count>Пример</a> <br>"
         instructions += "devApi/info/cars/tradeMarks -> Все возможные торговые марки машин <a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Пример</a><br>"
         instructions += "devApi/info/cars/colors -> Все возможные цвета машин <a href = http://84.201.139.189:8080/devApi/info/cars/colors>Пример</a><br>"
+        instructions += "devApi/info/cars/sorts -> Все возможные сортировки машин <a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Пример</a><br>"
+        instructions += "devApi/info/cars/bodyTypes -> Все возможные типы корпуса машин <a href = http://84.201.139.189:8080/devApi/info/cars/bodyTypes>Пример</a><br>"
         instructions += "devApi/search/cars -> сложный запрос, <a href = http://84.201.139.189:8080/devApi/help/requests/search/cars>Подробности</a><br>"
         return instructions
     }
@@ -46,22 +48,22 @@ class DevHelpController {
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(3)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?take=20>Пример</a><br>"
-        instructions += "${bt}tradeMarks: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/tradeMarks или не задан, возможно задание нескольких значений одновременно)<br>" +
+        instructions += "${bt}tradeMarks: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Список</a> или не задан, возможно задание нескольких значений одновременно)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины указаных марок)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?tradeMarks=Audi&tradeMarks=BMW>Пример</a><br>"
-        instructions += "${bt}colors: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/colors или не задан, возможно задание нескольких значений одновременно)<br>" +
+        instructions += "${bt}colors: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/colors>Список</a> или не задан, возможно задание нескольких значений одновременно)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины указаных цветов)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?colors=чёрный&colors=розовый>Пример</a><br>"
-        instructions += "${bt}bodyTypes: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/bodyTypes или не задан, возможно задание нескольких значений одновременно)<br>" +
+        instructions += "${bt}bodyTypes: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/bodyTypes>Список</a> или не задан, возможно задание нескольких значений одновременно)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины, имеющие один из заданных типов кузова)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?bodyTypes=купе&bodyTypes=микроавтобус>Пример</a><br>"
-        instructions += "${bt}sorts: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/sorts или не задан)<br>" +
+        instructions += "${bt}sorts: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Список</a> или не задан)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины в указанном порядке)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(Дешевые сверху)<br>" +
