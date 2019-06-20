@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    implementation( "com.google.code.gson:gson:2.8.5")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
