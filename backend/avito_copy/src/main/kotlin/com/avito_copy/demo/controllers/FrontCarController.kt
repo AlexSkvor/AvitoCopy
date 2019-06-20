@@ -12,16 +12,10 @@ import org.springframework.web.bind.annotation.*
  * @author AlexSkvor
  * */
 
+@Deprecated("CarsLoader and LinksLoader are used now")
 @RestController
 @RequestMapping("/justCar")
 class FrontCarController {
-
-    private companion object {
-        const val STATUS_SUCCESS = "success"
-        const val STATUS_ERROR = "error"
-        const val CODE_SUCCESS = 200
-        const val BAD_REQUEST = 400
-    }
 
     @GetMapping("/avito")
     @ResponseBody
@@ -31,10 +25,8 @@ class FrontCarController {
         val take = skip + 3
         if (take > 40) return BaseResponse(STATUS_ERROR, BAD_REQUEST, data = arrayOf(),
                 message = "you skipped too much!")
-        val pageNumber = getPageNumber(skip, take)
-        checkPageNumber(pageNumber)?.let { return it }
         checkRadius(radius)?.let { return it }
-        val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=$pageNumber&radius=$radius&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
+        val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=1&radius=$radius&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
         val elements: Elements = page.body().getElementsByClass("js-item-slider item-slider")
         val links: List<String> = elements.filter { it.hasAttr("href") }.map { it.attr("href") }
 
@@ -43,7 +35,7 @@ class FrontCarController {
         for (i in 0 until data.size)
             data[i].id = "$i"
 
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, message = "Method deprecated, will be removed soon")
     }
 
     private fun carFromLink(link: String): FrontCar {
@@ -53,7 +45,7 @@ class FrontCarController {
         val valuesList: Map<String, String> =
                 itemParams.map {
                     it.getElementsByClass("item-params-label").first().text() to it.textNodes()[1].toString()
-                }.toMap()//TODO dangerous use try catch here
+                }.toMap()
 
         val price = page.toString().substringAfter("avito.item.price").substring(0, 20).filter { it in '0'..'9' }
         val image = page.toString().substringAfter("avito.item.image = ")
@@ -67,13 +59,7 @@ class FrontCarController {
                             .toList().map { attr -> attr.text() }
                 }.toMap()
 
-        return FrontCarMapper.fromMap(valuesList, price, image, comment, advanced, url)//TODO convert into car Entity!!!
-    }
-
-    private fun checkPageNumber(number: Int): BaseResponse<FrontCar>? {
-        return if (number in 1..100) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, data = arrayOf(),
-                message = "Page Number should be between 1 and 100 inclusive, you passed $number")
+        return FrontCarMapper.fromMap(valuesList, price, image, comment, advanced, url)
     }
 
     private fun checkRadius(radius: Int): BaseResponse<FrontCar>? {
@@ -81,10 +67,6 @@ class FrontCarController {
         return if (good.contains(radius)) null
         else BaseResponse(STATUS_ERROR, BAD_REQUEST, data = arrayOf(),
                 message = "Radius should be one of $good, you passed: $radius")
-    }
-
-    private fun getPageNumber(skip: Int, take: Int): Int {
-        return 1//TODO
     }
 
 }

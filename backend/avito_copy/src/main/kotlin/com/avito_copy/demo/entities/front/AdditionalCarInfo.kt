@@ -1,7 +1,7 @@
 package com.avito_copy.demo.entities.front
 
 data class AdditionalCarInfo(
-        val comment: String = "",
+        var comment: String = "",
         val generation: String = "",
         val modification: String = "",
         val condition: String = "",

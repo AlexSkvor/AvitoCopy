@@ -23,51 +23,41 @@ class LinksLoader {
     @Scheduled(fixedRate = 18000)
     fun loadLinks() {
         if (pageNum >= 100) return
-
-        val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=$pageNum&radius=1000&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
-        val elements: Elements = page.body().getElementsByClass("js-item-slider item-slider")
-        val links: List<String> = elements.filter { it.hasAttr("href") }
-                .map { it.attr("href") }
-                .map { "https://www.avito.ru$it" }
-
-        if (links.isEmpty()) return
-        val file = File("allLinks.txt")
-        if (!file.exists()) {
-            file.createNewFile()
-            file.writeText("")
-            println("File Path: ${file.absolutePath}")
-        }
-
-        val old = gson.fromJson(file.readText(), LinksList::class.java)?.list ?: listOf()
-
-        val oldLinks = old.map { it.url }
-        val ans = (links.filter { !oldLinks.contains(it) }).map { LinkEntity(it) }
-
-        file.writeText(gson.toJson(LinksList((ans + old).distinct())))
-
+        saveLinks(pageNum)
         pageNum++
     }
 
     @Scheduled(fixedRate = 900_000)
     fun loadNewLinks() {
-        val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=1&radius=1000&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
-        val elements: Elements = page.body().getElementsByClass("js-item-slider item-slider")
-        val links: List<String> = elements.filter { it.hasAttr("href") }
-                .map { it.attr("href") }
-                .map { "https://www.avito.ru$it" }
+        saveLinks(1)
+    }
 
+    fun saveLinks(i: Int) {
+        val links = getLinks(i)
         if (links.isEmpty()) return
-        val file = File("allLinks.txt")
-        if (!file.exists()) {
-            file.createNewFile()
-            file.writeText("")
-        }
 
+        val file = File("allLinks.txt").saveCreation()
         val old = gson.fromJson(file.readText(), LinksList::class.java)?.list ?: listOf()
-
         val oldLinks = old.map { it.url }
         val ans = links.filter { !oldLinks.contains(it) }.map { LinkEntity(it) }
 
         file.writeText(gson.toJson(LinksList((ans + old).distinct())))
+    }
+
+    private fun getLinks(pageNumber: Int = 1): List<String> {
+        val page = Jsoup.connect("https://www.avito.ru/kaliningrad/avtomobili?p=$pageNumber&radius=1000&f=188_0b0.1375_0b0.1374_0b0.1286_0b0").get()
+        val elements: Elements = page.body().getElementsByClass("js-item-slider item-slider")
+
+        return elements.filter { it.hasAttr("href") }
+                .map { it.attr("href") }
+                .map { "https://www.avito.ru$it" }
+    }
+
+    private fun File.saveCreation(): File {
+        if (!this.exists()) {
+            this.createNewFile()
+            this.writeText("")
+        }
+        return this
     }
 }

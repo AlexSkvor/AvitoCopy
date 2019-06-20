@@ -1,5 +1,7 @@
 package com.avito_copy.demo.entities.front
 
+import com.avito_copy.demo.extensions.antiSpace
+
 object FrontCarMapper {
 
     fun fromMap(map: Map<String, String>, price: String, imageUrl: String,
@@ -8,27 +10,27 @@ object FrontCarMapper {
         return FrontCar(
                 imageUrl = imageUrl,
                 originalUrl = original,
-                tradeMark = map["Марка:"] ?: "",
-                model = map["Модель:"] ?: "",
-                color = map["Цвет:"] ?: "",
-                driveUnit = map["Привод:"] ?: "",
-                price = price,
-                year = map["Год выпуска:"] ?: "",
-                bodyType = map["Тип кузова:"] ?: "",
-                steeringSide = map["Руль:"] ?: "",
-                mileage = (map["Пробег:"] ?: "").filter { it in '0'..'9' } + " км",
+                tradeMark = map["Марка:"].antiSpace(),
+                model = map["Модель:"].antiSpace(),
+                color = map["Цвет:"].antiSpace(),
+                driveUnit = map["Привод:"].antiSpace(),
+                price = price.filter { it in '0'..'9' },
+                year = map["Год выпуска:"]?.filter { it in '0'..'9' } ?: "",
+                bodyType = map["Тип кузова:"].antiSpace(),
+                steeringSide = map["Руль:"].antiSpace(),
+                mileage = (map["Пробег:"])?.filter { it in '0'..'9' } + " км",
                 additionalInfo = AdditionalCarInfo(
-                        comment = comment ?: "",
-                        generation = map["Поколение:"] ?: "",
-                        modification = map["Модификация:"] ?: "",
-                        condition = map["Состояние:"] ?: "",
-                        ptsOwners = map["Владельцев по ПТС:"] ?: "",
-                        vinNumber = map["VIN или номер кузова:"] ?: "",
-                        doorsNumber = map["Количество дверей:"] ?: "",
-                        engineType = map["Тип двигателя:"] ?: "",
-                        transmission = map["Коробка передач:"] ?: "",
-                        completion = map["Комплектация:"] ?: "",
-                        watchPlace = map["Место осмотра:"] ?: ""
+                        comment = comment.antiSpace(),
+                        generation = map["Поколение:"].antiSpace(),
+                        modification = map["Модификация:"].antiSpace(),
+                        condition = map["Состояние:"].antiSpace(),
+                        ptsOwners = map["Владельцев по ПТС:"].antiSpace(),
+                        vinNumber = map["VIN или номер кузова:"].antiSpace(),
+                        doorsNumber = map["Количество дверей:"].antiSpace(),
+                        engineType = map["Тип двигателя:"].antiSpace(),
+                        transmission = map["Коробка передач:"].antiSpace(),
+                        completion = map["Комплектация:"].antiSpace(),
+                        watchPlace = map["Место осмотра:"].antiSpace()
                 ),
                 advancedInfo = AdvancedInfo(
                         powerSteering = advanced["Усилитель руля"] ?: listOf(),
