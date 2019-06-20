@@ -4,11 +4,9 @@ import com.avito_copy.demo.controllers.CarsHelper.getCars
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleBodyTypes
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleColors
 import com.avito_copy.demo.controllers.CarsHelper.getPossibleMarks
+import com.avito_copy.demo.controllers.CarsHelper.getPossibleSorts
 import com.avito_copy.demo.entities.front.FrontCar
-import com.avito_copy.demo.extensions.biggerEqualsThen
-import com.avito_copy.demo.extensions.lessEqualsThen
-import com.avito_copy.demo.extensions.withSkipTake
-import com.avito_copy.demo.extensions.wrongArguments
+import com.avito_copy.demo.extensions.*
 import com.avito_copy.demo.responses.BaseResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -31,29 +29,32 @@ class SearchController {
                    @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
                    @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
                    @RequestParam(value = "bodyTypes", required = false, defaultValue = "") bodyTypes: Array<String>,
+                   @RequestParam(value = "sort", required = false, defaultValue = "Дешевые сверху") sort: String,
                    @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int,
                    @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int
     ): BaseResponse<FrontCar> {
-        //TODO сортировка по уменьш/увел цены
+
         val cars = getCars()
         if (cars.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf())
 
         validateTradeMarks(tradeMarks)?.let { return it }
         validateColors(colors)?.let { return it }
         validateBodyTypes(bodyTypes)?.let { return it }
+        validateSort(sort)?.let { return it }
 
-        val temp = cars.asSequence()
+        val temp: List<FrontCar> = cars.asSequence()
                 .filter { tradeMarksFilter(it, tradeMarks) }
                 .filter { colorsFilter(it, colors) }
-                .filter { bodytypesFilter(it, bodyTypes) }
+                .filter { bodyTypesFilter(it, bodyTypes) }
                 .filter { it.price.biggerEqualsThen(minPrice) }
                 .filter { it.price.lessEqualsThen(maxPrice) }
                 .filter { it.year.biggerEqualsThen(minYear) }
                 .filter { it.year.lessEqualsThen(maxYear) }
                 .distinct()
                 .toList()
+                .sortedByType(sort)
 
         val medianCost = middleCost(temp)
 
@@ -87,6 +88,14 @@ class SearchController {
         else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/bodyTypes"))
     }
 
+    private fun validateSort(sort: String): BaseResponse<FrontCar>? {
+        if (sort.isEmpty()) return null
+        val permitted = getPossibleSorts()
+        val bad = if (permitted.contains(sort)) null else sort//bodies.filter { !permitted.contains(it) }
+        return if (bad.isNullOrEmpty()) null
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(listOf(bad), "info/cars/sorts"))
+    }
+
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {
         return marks.isEmpty() || marks.contains(car.tradeMark)
     }
@@ -95,7 +104,7 @@ class SearchController {
         return colors.isEmpty() || colors.contains(car.color)
     }
 
-    private fun bodytypesFilter(car: FrontCar, bodyTypes: Array<String>): Boolean {
+    private fun bodyTypesFilter(car: FrontCar, bodyTypes: Array<String>): Boolean {
         return bodyTypes.isEmpty() || bodyTypes.contains(car.bodyType)
     }
 
@@ -117,4 +126,15 @@ class SearchController {
             -1
         }
     }
+
+    private fun List<FrontCar>.sortedByType(sort: String): List<FrontCar> =
+            when (sort) {
+                "Старые сверху" -> this.toMutableList().sortedBy { it.year.toIntOrBig() }
+                "Новые сверху" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
+                "Дешевые сверху" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
+                "Дорогие сверху" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
+                "Большой пробег сверху" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
+                "Маленький пробег сверху" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
+                else -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
+            }
 }

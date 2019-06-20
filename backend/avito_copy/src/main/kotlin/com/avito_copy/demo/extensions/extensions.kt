@@ -40,3 +40,15 @@ fun String.biggerEqualsThen(num: Int): Boolean {
         false
     }
 }
+
+fun String.toIntOrBig(): Int = try {
+    this.toInt()
+} catch (e: Exception) {
+    99999999
+}
+
+fun String.toIntOrzero(): Int = try {
+    this.toInt()
+} catch (e: Exception) {
+    0
+}

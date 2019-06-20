@@ -61,6 +61,11 @@ class DevHelpController {
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?bodyTypes=купе&bodyTypes=микроавтобус>Пример</a><br>"
+        instructions += "${bt}sorts: <br>${bt}${bt}${bt}Валидация(один из devApi/info/cars/sorts или не задан)<br>" +
+                "${bt}${bt}${bt}Описание(Выдавать в ответе машины в указанном порядке)<br>" +
+                "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
+                "${bt}${bt}${bt}По умолчанию(Дешевые сверху)<br>" +
+                "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?sort=Старые сверху>Пример</a><br>"
         instructions += "${bt}minPrice: <br>${bt}${bt}${bt}Валидация(Целое число)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины ценой большей или равной minPrice)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
