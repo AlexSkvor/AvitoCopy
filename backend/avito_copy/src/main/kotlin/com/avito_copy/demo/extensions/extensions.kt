@@ -25,7 +25,8 @@ fun String?.antiSpace() =
 
 fun String.lessEqualsThen(num: Int): Boolean {
     return try {
-        this.filterDigits().toInt() <= num
+        if (this.isEmpty()) false
+        else this.filterDigits().toInt() <= num
     } catch (e: Exception) {
         println("lessEqualsThen $e")
         false
@@ -34,7 +35,8 @@ fun String.lessEqualsThen(num: Int): Boolean {
 
 fun String.biggerEqualsThen(num: Int): Boolean {
     return try {
-        this.filterDigits().toInt() >= num
+        if (this.isEmpty()) false
+        else this.filterDigits().toInt() >= num
     } catch (e: Exception) {
         println("biggerEqualsThen $e")
         false

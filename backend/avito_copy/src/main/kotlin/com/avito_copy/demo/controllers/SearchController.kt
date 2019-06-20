@@ -45,13 +45,13 @@ class SearchController {
         validateSort(sort)?.let { return it }
 
         val temp: List<FrontCar> = cars.asSequence()
-                .filter { tradeMarksFilter(it, tradeMarks) }
                 .filter { colorsFilter(it, colors) }
                 .filter { bodyTypesFilter(it, bodyTypes) }
                 .filter { it.price.biggerEqualsThen(minPrice) }
                 .filter { it.price.lessEqualsThen(maxPrice) }
                 .filter { it.year.biggerEqualsThen(minYear) }
                 .filter { it.year.lessEqualsThen(maxYear) }
+                .filter { tradeMarksFilter(it, tradeMarks) }
                 .distinct()
                 .toList()
                 .sortedByType(sort)
@@ -133,8 +133,8 @@ class SearchController {
                 "Новые сверху" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
                 "Дешевые сверху" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
                 "Дорогие сверху" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
-                "Большой пробег сверху" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
-                "Маленький пробег сверху" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
+                "Большой пробег сверху" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrBig() }
+                "Маленький пробег сверху" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrzero() }
                 else -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
             }
 }
