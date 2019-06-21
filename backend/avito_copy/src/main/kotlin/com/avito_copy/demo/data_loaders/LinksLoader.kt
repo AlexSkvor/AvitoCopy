@@ -2,6 +2,7 @@ package com.avito_copy.demo.data_loaders
 
 import com.avito_copy.demo.entities.back.LinkEntity
 import com.avito_copy.demo.entities.back.LinksList
+import com.avito_copy.demo.fileAllLinks
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -36,7 +37,7 @@ class LinksLoader {
         val links = getLinks(i)
         if (links.isEmpty()) return
 
-        val file = File("allLinks.txt").saveCreation()
+        val file = File(fileAllLinks).saveCreation()
         val old = gson.fromJson(file.readText(), LinksList::class.java)?.list ?: listOf()
         val oldLinks = old.map { it.url }
         val ans = links.filter { !oldLinks.contains(it) }.map { LinkEntity(it) }

@@ -28,6 +28,7 @@ class DevHelpController {
         instructions += "devApi/info/cars/colors -> Все возможные цвета машин <a href = http://84.201.139.189:8080/devApi/info/cars/colors>Пример</a><br>"
         instructions += "devApi/info/cars/sorts -> Все возможные сортировки машин <a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Пример</a><br>"
         instructions += "devApi/info/cars/bodyTypes -> Все возможные типы корпуса машин <a href = http://84.201.139.189:8080/devApi/info/cars/bodyTypes>Пример</a><br>"
+        instructions += "devApi/info/cars/models -> Все возможные модели машин (присутствует параметр tradeMarks), чтобы получитть только для конкретного производителя <a href = http://84.201.139.189:8080/devApi/info/cars/models>Пример</a><br>"
         instructions += "devApi/search/cars -> сложный запрос, <a href = http://84.201.139.189:8080/devApi/help/requests/search/cars>Подробности</a><br>"
         return instructions
     }
@@ -53,6 +54,11 @@ class DevHelpController {
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
                 "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?tradeMarks=Audi&tradeMarks=BMW>Пример</a><br>"
+        instructions += "${bt}models: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/models>Список</a> или не задан, возможно задание нескольких значений одновременно, Если задан, то то должна быть задана и соответствующая ему марка)<br>" +
+                "${bt}${bt}${bt}Описание(Выдавать в ответе машины указаных марок)<br>" +
+                "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
+                "${bt}${bt}${bt}По умолчанию(не задан)<br>" +
+                "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?tradeMarks=Audi&tradeMarks=BMW&models=A7>Пример</a><br>"
         instructions += "${bt}colors: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/colors>Список</a> или не задан, возможно задание нескольких значений одновременно)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины указаных цветов)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +

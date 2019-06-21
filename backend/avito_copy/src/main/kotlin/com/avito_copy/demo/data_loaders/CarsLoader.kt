@@ -3,6 +3,10 @@ package com.avito_copy.demo.data_loaders
 import com.avito_copy.demo.entities.back.LinksList
 import com.avito_copy.demo.entities.front.FrontCar
 import com.avito_copy.demo.entities.front.FrontCarMapper
+import com.avito_copy.demo.fileAllCars
+import com.avito_copy.demo.fileAllCarsSaving
+import com.avito_copy.demo.fileAllLinks
+import com.avito_copy.demo.fileAllLinksSaving
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -36,14 +40,14 @@ class CarsLoader {
             e.printStackTrace()
         }
 
-        val file = File("allLinks.txt")
+        val file = File(fileAllLinks)
         if (!file.exists()) return
         val links = gson.fromJson(file.readText(), LinksList::class.java)
         val link = links.list.asSequence().firstOrNull { !it.loaded && !it.errored }
         link?.let {
             val car = carFromLink(link.url)
             car?.let {
-                val carsFile = File("allCars.txt")
+                val carsFile = File(fileAllCars)
                 if (!carsFile.exists()) carsFile.createNewFile()
                 carsFile.appendText(gson.toJson(car) + "\n")
                 links.list.forEach { if (it.url == link.url) it.loaded = true }
@@ -85,11 +89,11 @@ class CarsLoader {
     }
 
     private fun rescueFiles() {
-        val cars = File("allCars.txt")
-        val saveCars = File("allCarsSaving$time")
+        val cars = File(fileAllCars)
+        val saveCars = File("$fileAllCarsSaving$time")
 
-        val links = File("allLinks.txt")
-        val savedLinks = File("allLinksSaving$time")
+        val links = File(fileAllLinks)
+        val savedLinks = File("$fileAllLinksSaving$time")
 
         if (num % 500 == 0) {
             cars.copyTo(saveCars)

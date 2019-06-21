@@ -1,10 +1,13 @@
 package com.avito_copy.demo.controllers
 
+import com.avito_copy.demo.*
+import com.avito_copy.demo.controllers.CarsHelper.errorResponse
 import com.avito_copy.demo.controllers.CarsHelper.getCars
-import com.avito_copy.demo.controllers.CarsHelper.getPossibleBodyTypes
-import com.avito_copy.demo.controllers.CarsHelper.getPossibleColors
-import com.avito_copy.demo.controllers.CarsHelper.getPossibleMarks
-import com.avito_copy.demo.controllers.CarsHelper.getPossibleSorts
+import com.avito_copy.demo.controllers.ValidationHelper.validateBodyTypes
+import com.avito_copy.demo.controllers.ValidationHelper.validateColors
+import com.avito_copy.demo.controllers.ValidationHelper.validateModels
+import com.avito_copy.demo.controllers.ValidationHelper.validateSort
+import com.avito_copy.demo.controllers.ValidationHelper.validateTradeMarks
 import com.avito_copy.demo.entities.front.FrontCar
 import com.avito_copy.demo.extensions.*
 import com.avito_copy.demo.responses.BaseResponse
@@ -29,6 +32,7 @@ class SearchController {
                    @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
                    @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
                    @RequestParam(value = "bodyTypes", required = false, defaultValue = "") bodyTypes: Array<String>,
+                   @RequestParam(value = "models", required = false, defaultValue = "") models: Array<String>,
                    @RequestParam(value = "sort", required = false, defaultValue = "Дешевые") sort: String,
                    @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int,
@@ -39,10 +43,11 @@ class SearchController {
         val cars = getCars()
         if (cars.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf())
 
-        validateTradeMarks(tradeMarks)?.let { return it }
-        validateColors(colors)?.let { return it }
-        validateBodyTypes(bodyTypes)?.let { return it }
-        validateSort(sort)?.let { return it }
+        validateTradeMarks(tradeMarks)?.let { return errorResponse(it) }
+        validateColors(colors)?.let { return errorResponse(it) }
+        validateBodyTypes(bodyTypes)?.let { return errorResponse(it) }
+        validateSort(sort)?.let { return errorResponse(it) }
+        validateModels(tradeMarks, models)?.let { return errorResponse(it) }
 
         val temp: List<FrontCar> = cars.asSequence()
                 .filter { colorsFilter(it, colors) }
@@ -52,6 +57,7 @@ class SearchController {
                 .filter { it.year.biggerEqualsThen(minYear) }
                 .filter { it.year.lessEqualsThen(maxYear) }
                 .filter { tradeMarksFilter(it, tradeMarks) }
+                .filter { modelsFilter(it, models) }
                 .distinct()
                 .toList()
                 .sortedByType(sort)
@@ -64,38 +70,6 @@ class SearchController {
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, medianCost = medianCost)
     }
 
-    private fun validateTradeMarks(marks: Array<String>): BaseResponse<FrontCar>? {
-        if (marks.isEmpty()) return null
-        val permitted = getPossibleMarks()
-        val bad = marks.filter { !permitted.contains(it) }
-        return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Список</a>"))
-    }
-
-    private fun validateColors(colors: Array<String>): BaseResponse<FrontCar>? {
-        if (colors.isEmpty()) return null
-        val permitted = getPossibleColors()
-        val bad = colors.filter { !permitted.contains(it) }
-        return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/colors>Список</a>"))
-    }
-
-    private fun validateBodyTypes(bodies: Array<String>): BaseResponse<FrontCar>? {
-        if (bodies.isEmpty()) return null
-        val permitted = getPossibleBodyTypes()
-        val bad = bodies.filter { !permitted.contains(it) }
-        return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/bodyTypes>Список</a>"))
-    }
-
-    private fun validateSort(sort: String): BaseResponse<FrontCar>? {
-        if (sort.isEmpty()) return null
-        val permitted = getPossibleSorts()
-        val bad = if (permitted.contains(sort)) null else sort//bodies.filter { !permitted.contains(it) }
-        return if (bad.isNullOrEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(listOf(bad), "<a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Список</a>"))
-    }
-
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {
         return marks.isEmpty() || marks.contains(car.tradeMark)
     }
@@ -106,6 +80,10 @@ class SearchController {
 
     private fun bodyTypesFilter(car: FrontCar, bodyTypes: Array<String>): Boolean {
         return bodyTypes.isEmpty() || bodyTypes.contains(car.bodyType)
+    }
+
+    private fun modelsFilter(car: FrontCar, models: Array<String>): Boolean {
+        return models.isEmpty() || models.contains(car.model)
     }
 
     private fun Array<FrontCar>.setIds() {
@@ -130,10 +108,10 @@ class SearchController {
     private fun List<FrontCar>.sortedByType(sort: String): List<FrontCar> =
             when (sort) {
                 "Старые" -> this.toMutableList().sortedBy { it.year.toIntOrBig() }
-                "Новые" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
+                "Новые" -> this.toMutableList().sortedByDescending { it.year.toIntOrZero() }
                 "Дешевые" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
-                "Дорогие" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
-                "Большой_пробег" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
+                "Дорогие" -> this.toMutableList().sortedByDescending { it.price.toIntOrZero() }
+                "Большой_пробег" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrZero() }
                 "Маленький_пробег" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
                 else -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
             }
