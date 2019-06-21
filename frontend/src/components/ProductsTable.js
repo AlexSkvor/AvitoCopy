@@ -1,15 +1,52 @@
 import React from "react"
 import Product from "./Products"
 import dataBase from "./dataBase"
-import { timeout } from "q";
+import colorBase from "./colorBase"
+import markBase from "./markBase"
+import { isUndefined } from "util";
 
 let newDB=[0,1]
+function build_url(array){
+    let schet = [0,0,0]
+    var requestURL = 'http://84.201.139.189:8080/devApi/search/cars?skip=0&take=1000&'
+    for (let i = 0; i < array.length; i++) {
+        let tmpString = array[i]
+        for (let j = 0; j < colorBase.length; j++) {
+            if(tmpString.toLocaleLowerCase()==colorBase[j].toLocaleLowerCase()){
+                schet[i]=1
+                requestURL=requestURL+'colors='+colorBase[j] + '&'
+                break
+            }
+        }
+        for (let j = 0; j < markBase.length; j++) {
+            if(tmpString.toLocaleLowerCase()==markBase[j].toLocaleLowerCase()){
+                schet[i]=1
+                requestURL=requestURL+'tradeMarks='+ markBase[j] + '&'
+                break
+            }
+        }
 
+    }
+    let model_sum =''
+    for(let i = 0; i < array.length; i++) {
+        if(schet[i]==0&&!isUndefined(array[i])){
+            model_sum+=array[i]
+            if(i!=array.length-1) model_sum+=' '
+        }
+    }
+
+    alert("model is" + model_sum)
+
+    if(model_sum!='') requestURL=requestURL+'models='+model_sum+ '&'
+
+    alert(requestURL)
+    return requestURL
+}
 function get_info(e){
     if(e.keyCode==13){
         let searchInfo = document.getElementById('searchInfo').value
         let arrayInfo = searchInfo.split(' ')
-        var requestURL = 'http://84.201.139.189:8080/devApi/search/cars?skip=0&take=100&tradeMarks=' + arrayInfo[0]
+        var requestURL = build_url(arrayInfo)
         var request = new XMLHttpRequest();
         request.open('GET', requestURL,false);
         request.send();

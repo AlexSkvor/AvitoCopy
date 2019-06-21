@@ -8,5 +8,5 @@ function req(str){
     return dataBase
 }
 
-let dataBase = req("BMW")
+let dataBase = req("")
 export default dataBase
