@@ -129,12 +129,12 @@ class SearchController {
 
     private fun List<FrontCar>.sortedByType(sort: String): List<FrontCar> =
             when (sort) {
-                "Старые сверху" -> this.toMutableList().sortedBy { it.year.toIntOrBig() }
-                "Новые сверху" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
-                "Дешевые сверху" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
-                "Дорогие сверху" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
-                "Большой пробег сверху" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrBig() }
-                "Маленький пробег сверху" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrzero() }
+                "Старые" -> this.toMutableList().sortedBy { it.year.toIntOrBig() }
+                "Новые" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
+                "Дешевые" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
+                "Дорогие" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
+                "Большой пробег" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
+                "Маленький пробег" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
                 else -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
             }
 }
