@@ -15,7 +15,7 @@ import java.io.File
  * @author AlexSkvor
  * */
 
-@Component
+/*@Component
 class LinksLoader {
 
     private var pageNum = 0
@@ -61,4 +61,4 @@ class LinksLoader {
         }
         return this
     }
-}
+}*/

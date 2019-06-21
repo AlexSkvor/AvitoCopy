@@ -22,7 +22,7 @@ import kotlin.random.Random
  * Created on 6/20/2019
  * @author AlexSkvor
  * */
-
+/*
 @Component
 class CarsLoader {
 
@@ -102,4 +102,4 @@ class CarsLoader {
         if (num == 100_020) num = 0
         num++
     }
-}
+}*/
