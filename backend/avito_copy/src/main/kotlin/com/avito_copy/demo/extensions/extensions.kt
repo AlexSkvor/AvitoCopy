@@ -49,8 +49,19 @@ fun String.toIntOrBig(): Int = try {
     99999999
 }
 
-fun String.toIntOrzero(): Int = try {
+fun String.toIntOrZero(): Int = try {
     this.toInt()
 } catch (e: Exception) {
     0
+}
+
+fun <T> List<List<T>>.merge(): List<T> {
+    val result = mutableListOf<T>()
+    this.forEach { result += it }
+    return result.distinct()
+}
+
+fun <T> T.alsoPrintDebug(msg: String = ""): T {
+    println("$msg...........$this")
+    return this
 }

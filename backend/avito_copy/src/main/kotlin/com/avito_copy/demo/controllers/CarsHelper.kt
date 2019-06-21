@@ -1,14 +1,20 @@
 package com.avito_copy.demo.controllers
 
+import com.avito_copy.demo.*
+import com.avito_copy.demo.entities.back.MarksModelsList
 import com.avito_copy.demo.entities.front.FrontCar
+import com.avito_copy.demo.extensions.alsoPrintDebug
+import com.avito_copy.demo.responses.BaseResponse
 import com.google.gson.Gson
 import java.io.File
 import java.lang.Exception
 
 object CarsHelper {
 
+    private val gson = Gson()
+
     fun getCars(): List<FrontCar> {
-        val carsFile = File("allCars.txt")
+        val carsFile = File(fileAllCars)
         if (!carsFile.exists()) return listOf()
         val cars = mutableListOf<FrontCar>()
         carsFile.forEachLine { cars.add(Gson().fromJson(it, FrontCar::class.java)) }
@@ -17,7 +23,7 @@ object CarsHelper {
 
     fun getPossibleMarks(): List<String> {
         return try {
-            File("allTradeMarks.txt").readLines()
+            File(fileAllTrademarks).readLines()
         } catch (e: Exception) {
             println("Tried to reed trade marks from file $e")
             listOf()
@@ -26,7 +32,7 @@ object CarsHelper {
 
     fun getPossibleColors(): List<String> {
         return try {
-            File("allColors.txt").readLines()
+            File(fileAllColors).readLines()
         } catch (e: Exception) {
             println("Tried to reed colors from file $e")
             listOf()
@@ -35,19 +41,31 @@ object CarsHelper {
 
     fun getPossibleBodyTypes(): List<String> {
         return try {
-            File("allBodyTypes.txt").readLines()
+            File(fileAllBodyTypes).readLines()
         } catch (e: Exception) {
             println("Tried to reed body types from file $e")
             listOf()
         }
     }
 
+    fun getPossibleModels(): MarksModelsList {
+        return try {
+            gson.fromJson(File(fileAllModels).readText(), MarksModelsList::class.java).alsoPrintDebug("AAAAA")
+        } catch (e: Exception) {
+            println("Tried to reed body types from file $e")
+            MarksModelsList()
+        }
+    }
+
     fun getPossibleSorts(): List<String> {
         return try {
-            File("allSorts.txt").readLines()
+            File(fileAllSorts).readLines()
         } catch (e: Exception) {
             println("Tried to reed sorts from file $e")
             listOf()
         }
     }
+
+    inline fun <reified T> errorResponse(msg: String): BaseResponse<T> =
+            BaseResponse(STATUS_ERROR, CODE_BAD_REQUEST, arrayOf(), message = msg)
 }
