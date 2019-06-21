@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.io.File
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.random.Random
 
 /**
@@ -20,12 +22,14 @@ import kotlin.random.Random
 @Component
 class CarsLoader {
 
-    private var counter = 100
+    private var num = 0
     private val gson = Gson()
+    private val time: String
+        get() = SimpleDateFormat("MM_DD_HH_mm_ss").format(Date())
 
     @Scheduled(fixedRate = 5000)
     fun loadCars() {
-        distinctCars()
+        rescueFiles()
         try {
             Thread.sleep(Random.nextLong(1, 10000))
         } catch (e: InterruptedException) {
@@ -59,7 +63,7 @@ class CarsLoader {
             val valuesList: Map<String, String> =
                     itemParams.map {
                         it.getElementsByClass("item-params-label").first().text() to it.textNodes()[1].toString()
-                    }.toMap()//TODO dangerous use try catch here
+                    }.toMap()
 
             val price = page.toString().substringAfter("avito.item.price").substring(0, 20).filter { it in '0'..'9' }
             val image = page.toString().substringAfter("avito.item.image = ")
@@ -80,16 +84,18 @@ class CarsLoader {
         }
     }
 
-    private fun distinctCars() {
-        if (counter == 100) {
-            val carsFile = File("allCars.txt")
-            if (!carsFile.exists()) return
-            val cars = mutableListOf<FrontCar>()
-            carsFile.forEachLine { cars.add(gson.fromJson(it, FrontCar::class.java)) }
-            carsFile.writeText("")
-            cars.distinct().forEach { car -> carsFile.appendText(gson.toJson(car) + "\n") }
-            counter = 0
-        } else counter++
-    }
+    private fun rescueFiles() {
+        val cars = File("allCars.txt")
+        val saveCars = File("allCarsSaving$time")
 
+        val links = File("allLinks.txt")
+        val savedLinks = File("allLinksSaving$time")
+
+        if (num % 99 == 0) {
+            cars.copyTo(saveCars)
+            links.copyTo(savedLinks)
+        }
+        if (num == 100_020) num = 0
+        num++
+    }
 }
