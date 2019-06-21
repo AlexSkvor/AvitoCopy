@@ -1,19 +1,40 @@
 import React from "react"
 import Product from "./Products"
 import dataBase from "./dataBase"
+import { timeout } from "q";
+
+let newDB=[0,1]
+
+function get_info(e){
+    if(e.keyCode==13){
+        let searchInfo = document.getElementById('searchInfo').value
+        let arrayInfo = searchInfo.split(' ')
+        var requestURL = 'http://84.201.139.189:8080/devApi/search/cars?skip=0&take=100&tradeMarks=' + arrayInfo[0]
+        var request = new XMLHttpRequest();
+        request.open('GET', requestURL,false);
+        request.send();
+        let DB = request.responseText
+        newDB = JSON.parse(DB).data
+      //  alert(newDB)
+    } 
+}
 
 class ProductsTable extends React.Component{
     constructor(){
         super()
         this.state ={
             dataBase:dataBase,
-            newData:[{}]
+          //  newData:[{}]
         }
         //////////////////////////////////////////
-        this.addItem = this.addItem.bind(this)
+     //   this.get_info = this.get_info.bind(this)
+      //  this.addItem = this.addItem.bind(this)
+      //  this.my_init = this.my_init.bind(this)
+        this.new_get = this.new_get.bind(this)
+        this.refresh = this.refresh.bind(this)
         ////////////////////////////////////////// 
 
-        ///////////////////////////////////////////////////
+        /*//////////////////////////////////////////////////
         for(let key in this.state.dataBase[0]){
             this.state.newData[0][key] = this.state.dataBase[0][key]
         }
@@ -21,33 +42,80 @@ class ProductsTable extends React.Component{
         for(let index = 1; index < 3; index++){
             this.state.newData.push(this.state.dataBase[index])
         }
+        */
     }
-
-    addItem(){
-        if(this.state.newData.length<this.state.dataBase.length-3){
-            const addData = []
-            for(let i = 0;i<this.state.newData.length;i++){
-                addData.push(this.state.newData[i])
-            }
-            for (let i = 0; i < 3; i++) {
-                addData.push(this.state.dataBase[this.state.newData.length+i])
-            }
-            
+    /*
+    my_init(){
+        const tmpData = []
+        for(let key in this.state.dataBase[0]){
+            tmpData[0][key] = this.state.dataBase[0][key]
+        }
+        //////////////////////////////////////////
+        for(let index = 1; index < 3; index++){
+            tmpData.push(this.state.dataBase[index])
+        }
+        this.setState({
+            newData:tmpData
+        })
+    }
+    */
+    refresh(){
+        if(newDB.length!=2){
             this.setState({
-                newData:addData
+                dataBase:newDB
             })
         }
     }
 
+    new_get(){
+        get_info()
+        this.setState({
+            dataBase:newDB
+        })
+    }
+    
+    /*
+    addItem(){
+        this.setState({
+            dataBase:newDB
+        })
+
+        if(this.state.newData.length<this.state.dataBase.length-3){
+            const addData = []
+            for(let i = 0;i<this.state.newData.length;i++) addData.push(this.state.newData[i])
+            for (let i = 0; i < 3; i++) addData.push(this.state.dataBase[this.state.newData.length+i])
+            this.setState({newData:addData})
+        }
+        alert(this.state.newData.length)
+        alert("newDB len is "+newDB.length)
+        alert("dataBase len is "+ this.state.dataBase.length)
+    }
+    */
+
     render(){
         return(
-            <div className="table-style">
-                <div className="table-style"> 
-                    {this.state.newData.map(product => <Product key={product.id} imageUrl={product.imageUrl} watchPlace={product.additionalInfo.watchPlace} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} condition = {product.additionalInfo.condition} transmission={product.additionalInfo.transmission} ptsOwners={product.additionalInfo.ptsOwners} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
-                </div>
-                <div className="showMore-holder">
-                    <button onClick={this.addItem} className="showMore-btn" ><p>Показать еще обьявления</p></button>
-                </div>
+            <div className="app-style">
+                    <div className="search-string">
+                        <div className="search-holder">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="searchInfo" type="text" placeholder="Search..."/>
+                        </div>
+                    </div>
+                    <div className="showMore-holder">
+                            <div /*onClick={this.addItem}*/ className="frame-btn">
+                                <div onClick={this.refresh} className="button">
+                                    <span>Refresh</span>
+                                    <svg>
+                                    <polyline className="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+                                    <polyline className="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+                                </svg>
+                                </div>
+                            </div>
+                    </div>
+                    <div className="table-style">
+                        <div  className="table-style"> 
+                            {this.state.dataBase.map(product => <Product key={product.id} imageUrl={product.imageUrl} watchPlace={product.additionalInfo.watchPlace} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} condition = {product.additionalInfo.condition} transmission={product.additionalInfo.transmission} ptsOwners={product.additionalInfo.ptsOwners} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
+                        </div>
+                    </div>
             </div>
         )
     }
