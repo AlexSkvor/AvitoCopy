@@ -66,7 +66,7 @@ class DevHelpController {
         instructions += "${bt}sorts: <br>${bt}${bt}${bt}Валидация(один из <a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Список</a> или не задан)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины в указанном порядке)<br>" +
                 "${bt}${bt}${bt}Обязательный(НЕТ)<br>" +
-                "${bt}${bt}${bt}По умолчанию(Дешевые сверху)<br>" +
+                "${bt}${bt}${bt}По умолчанию(Дешевые)<br>" +
                 "${bt}${bt}${bt}<a href = http://84.201.139.189:8080/devApi/search/cars?sort=Старые>Пример</a><br>"
         instructions += "${bt}minPrice: <br>${bt}${bt}${bt}Валидация(Целое число)<br>" +
                 "${bt}${bt}${bt}Описание(Выдавать в ответе машины ценой большей или равной minPrice)<br>" +

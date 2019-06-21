@@ -29,7 +29,7 @@ class SearchController {
                    @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,
                    @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
                    @RequestParam(value = "bodyTypes", required = false, defaultValue = "") bodyTypes: Array<String>,
-                   @RequestParam(value = "sort", required = false, defaultValue = "Дешевые сверху") sort: String,
+                   @RequestParam(value = "sort", required = false, defaultValue = "Дешевые") sort: String,
                    @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "999999") maxPrice: Int,
                    @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
@@ -69,7 +69,7 @@ class SearchController {
         val permitted = getPossibleMarks()
         val bad = marks.filter { !permitted.contains(it) }
         return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/tradeMarks"))
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/tradeMarks>Список</a>"))
     }
 
     private fun validateColors(colors: Array<String>): BaseResponse<FrontCar>? {
@@ -77,7 +77,7 @@ class SearchController {
         val permitted = getPossibleColors()
         val bad = colors.filter { !permitted.contains(it) }
         return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/colors"))
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/colors>Список</a>"))
     }
 
     private fun validateBodyTypes(bodies: Array<String>): BaseResponse<FrontCar>? {
@@ -85,7 +85,7 @@ class SearchController {
         val permitted = getPossibleBodyTypes()
         val bad = bodies.filter { !permitted.contains(it) }
         return if (bad.isEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "info/cars/bodyTypes"))
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(bad, "<a href = http://84.201.139.189:8080/devApi/info/cars/bodyTypes>Список</a>"))
     }
 
     private fun validateSort(sort: String): BaseResponse<FrontCar>? {
@@ -93,7 +93,7 @@ class SearchController {
         val permitted = getPossibleSorts()
         val bad = if (permitted.contains(sort)) null else sort//bodies.filter { !permitted.contains(it) }
         return if (bad.isNullOrEmpty()) null
-        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(listOf(bad), "info/cars/sorts"))
+        else BaseResponse(STATUS_ERROR, BAD_REQUEST, arrayOf(), message = wrongArguments(listOf(bad), "<a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Список</a>"))
     }
 
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {
@@ -133,8 +133,8 @@ class SearchController {
                 "Новые" -> this.toMutableList().sortedByDescending { it.year.toIntOrzero() }
                 "Дешевые" -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
                 "Дорогие" -> this.toMutableList().sortedByDescending { it.price.toIntOrzero() }
-                "Большой пробег" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
-                "Маленький пробег" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
+                "Большой_пробег" -> this.toMutableList().sortedByDescending { it.mileage.filterDigits().toIntOrzero() }
+                "Маленький_пробег" -> this.toMutableList().sortedBy { it.mileage.filterDigits().toIntOrBig() }
                 else -> this.toMutableList().sortedBy { it.price.toIntOrBig() }
             }
 }
