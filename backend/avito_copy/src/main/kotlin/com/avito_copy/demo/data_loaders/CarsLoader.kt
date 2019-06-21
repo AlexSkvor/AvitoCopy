@@ -91,7 +91,7 @@ class CarsLoader {
         val links = File("allLinks.txt")
         val savedLinks = File("allLinksSaving$time")
 
-        if (num % 99 == 0) {
+        if (num % 500 == 0) {
             cars.copyTo(saveCars)
             links.copyTo(savedLinks)
         }
