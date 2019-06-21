@@ -3,15 +3,62 @@
 .showMore-holder{
     display: flex;
     height:40px;
-    width: 50%;
+    width: 20%;
     margin: 20px;
     
 }
 
-.showMore-btn{
-    width: 100%;
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
+.frame {
+  
+  
+  width: 400px;
+  height: 400px;
+ 
+  border-radius: 2px;
+  box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: rgba(255, 161, 20, 0);
+  color: white;
+  font-family: Raleway, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
 }
 
-.showMore-btn p{
-    font-family: "Lora";
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.button svg {
+  height: 55px;
+  width: 150px;
+  fill: none;
+  stroke-width: 5;
+}
+.button svg .o1 {
+  stroke: rgb(255, 255, 255);
+  fill: rgba(255, 161, 20, 0);
+  transition: all 0.5s ease-in-out;
+}
+.button svg .o2 {
+  stroke: rgb(243, 26, 160);
+  stroke-dasharray: 20 420;
+  stroke-dashoffset: 20;
+  transition: all 1s ease-in;
+}
+.button span {
+  position: absolute;
+  margin: auto 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color:white;
+}
+.button:hover .o1 {
+  fill: rgba(3, 3, 3, 0.3);
+}
+.button:hover .o2 {
+  stroke-dashoffset: -420;
 }
