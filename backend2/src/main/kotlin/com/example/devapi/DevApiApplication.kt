@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
  * @author AlexSkvor
  * */
 
-
 @EnableScheduling
 @SpringBootApplication
 class DevApiApplication : SpringBootServletInitializer() {

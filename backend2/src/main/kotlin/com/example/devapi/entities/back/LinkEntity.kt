@@ -5,12 +5,12 @@ package com.example.devapi.entities.back
  * @author AlexSkvor
  * */
 
-data class LinkEntity(
+data class LinkEntityOld(
         val url: String,
         var loaded: Boolean = false,
         var errored: Boolean = false
 )
 
 data class LinksList(
-        var list: List<LinkEntity>
+        var list: List<LinkEntityOld>
 )

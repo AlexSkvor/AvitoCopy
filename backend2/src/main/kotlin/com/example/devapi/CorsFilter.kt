@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi
 
 import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletResponse

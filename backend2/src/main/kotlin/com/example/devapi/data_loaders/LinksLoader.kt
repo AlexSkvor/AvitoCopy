@@ -1,8 +1,7 @@
 package com.example.devapi.data_loaders
 
-import com.example.devapi.entities.back.LinkEntity
 import com.example.devapi.entities.back.LinksList
-import com.example.devapi.fileAllLinks
+import com.example.devapi.loaders.fileAllLinks
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -15,7 +14,7 @@ import java.io.File
  * @author AlexSkvor
  * */
 
-@Component
+/*@Component
 class LinksLoader {
 
     private var pageNum = 0
@@ -61,4 +60,4 @@ class LinksLoader {
         }
         return this
     }
-}
+}*/

@@ -3,10 +3,10 @@ package com.example.devapi.data_loaders
 import com.example.devapi.entities.back.LinksList
 import com.example.devapi.entities.front.FrontCar
 import com.example.devapi.entities.front.FrontCarMapper
-import com.example.devapi.fileAllCars
-import com.example.devapi.fileAllCarsSaving
-import com.example.devapi.fileAllLinks
-import com.example.devapi.fileAllLinksSaving
+import com.example.devapi.loaders.fileAllCars
+import com.example.devapi.loaders.fileAllCarsSaving
+import com.example.devapi.loaders.fileAllLinks
+import com.example.devapi.loaders.fileAllLinksSaving
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
