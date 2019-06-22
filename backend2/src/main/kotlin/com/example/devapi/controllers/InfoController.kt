@@ -1,15 +1,9 @@
 package com.example.devapi.controllers
 
-import com.example.devapi.CODE_SUCCESS
-import com.example.devapi.STATUS_SUCCESS
-import com.example.devapi.controllers.CarsHelper.errorResponse
-import com.example.devapi.controllers.CarsHelper.getCars
-import com.example.devapi.controllers.CarsHelper.getPossibleBodyTypes
-import com.example.devapi.controllers.CarsHelper.getPossibleColors
-import com.example.devapi.controllers.CarsHelper.getPossibleMarks
-import com.example.devapi.controllers.CarsHelper.getPossibleModels
-import com.example.devapi.controllers.CarsHelper.getPossibleSorts
-import com.example.devapi.extensions.merge
+import com.example.devapi.utils.CODE_SUCCESS
+import com.example.devapi.utils.STATUS_SUCCESS
+import com.example.devapi.database.dao.CarsDao
+import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.responses.BaseResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,15 +17,24 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/info")
-class InfoController {
+class InfoController(
+        private val carsRepository: CarsDao,
+        private val linksRepository: LinksDao
+) {
 
     @GetMapping("/cars/count")
     fun getTotalMarksNumber(): BaseResponse<Int> {
-        val carsNumber = getCars().size
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsNumber))
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsRepository.count().toInt()))
     }
 
-    @GetMapping("/cars/tradeMarks")
+    @GetMapping("/cars/cities")
+    fun getCities(@RequestParam(value = "all", required = false, defaultValue = "false") all: String): BaseResponse<String> {
+        val ans = if (all == "true") linksRepository.getAllCities()
+        else linksRepository.getLoadedCities()
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, ans.toTypedArray())
+    }
+
+    /*@GetMapping("/cars/tradeMarks")
     fun getTradeMarksList(): BaseResponse<String> {
         val data = getPossibleMarks().toTypedArray()
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
@@ -63,5 +66,5 @@ class InfoController {
         if (tradeMarks.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, getPossibleModels().list.map { it.models }.merge().toTypedArray())
         val data = getPossibleModels().list.filter { tradeMarks.contains(it.tradeMark) }.map { it.models }.merge().toTypedArray()
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
-    }
+    }*/
 }

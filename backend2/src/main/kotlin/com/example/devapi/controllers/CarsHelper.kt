@@ -1,7 +1,6 @@
 package com.example.devapi.controllers
 
 import com.example.devapi.*
-import com.example.devapi.entities.back.MarksModelsList
 import com.example.devapi.entities.front.FrontCar
 import com.example.devapi.loaders.*
 import com.example.devapi.responses.BaseResponse
@@ -11,7 +10,7 @@ import java.lang.Exception
 
 object CarsHelper {
 
-    private val gson = Gson()
+    /*private val gson = Gson()
 
     fun getCars(): List<FrontCar> {
         val carsFile = File(fileAllCars)
@@ -67,5 +66,5 @@ object CarsHelper {
     }
 
     inline fun <reified T> errorResponse(msg: String): BaseResponse<T> =
-            BaseResponse(STATUS_ERROR, CODE_BAD_REQUEST, arrayOf(), message = msg)
+            BaseResponse(STATUS_ERROR, CODE_BAD_REQUEST, arrayOf(), message = msg)*/
 }

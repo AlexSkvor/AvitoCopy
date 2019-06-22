@@ -1,5 +1,6 @@
-package com.example.devapi
+package com.example.devapi.utils
 
+import com.example.devapi.DevApiApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 

@@ -2,7 +2,8 @@ package com.example.devapi.loaders.avito
 
 import com.example.devapi.database.dao.*
 import com.example.devapi.database.entities.CarEntity
-import com.example.devapi.extensions.alsoPrintDebug
+import com.example.devapi.utils.alsoPrintDebug
+import com.example.devapi.utils.loggedTry
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.scheduling.annotation.Scheduled
@@ -28,13 +29,13 @@ class AvitoCarsLoader(
         if (linksRepository.empty) return
 
         val link = linksRepository.nextAvitoLink()
-        link.alsoPrintDebug("AAAAAAAAA")
         val car = carFromLink(link.url, link.city)
         if (car != null) {
-            carsRepository.insertReplace(car)
-            linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))
+            loggedTry {
+                carsRepository.insertReplace(car)
+                linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))
+            }
         } else {
-            alsoPrintDebug("NULL")
             carsRepository.deleteById(link.url)
             linksRepository.deleteById(link.url)
         }

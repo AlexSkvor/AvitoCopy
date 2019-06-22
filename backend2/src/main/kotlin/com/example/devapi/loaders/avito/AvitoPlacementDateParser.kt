@@ -1,7 +1,7 @@
 package com.example.devapi.loaders.avito
 
-import com.example.devapi.extensions.antiSpace
-import com.example.devapi.extensions.toIntOrZero
+import com.example.devapi.utils.antiSpace
+import com.example.devapi.utils.toIntOrZero
 import java.util.*
 
 object AvitoPlacementDateParser {

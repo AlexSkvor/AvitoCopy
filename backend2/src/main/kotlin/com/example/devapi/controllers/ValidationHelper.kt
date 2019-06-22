@@ -1,11 +1,8 @@
 package com.example.devapi.controllers
 
-import com.example.devapi.extensions.merge
-import com.example.devapi.extensions.wrongArguments
-
 object ValidationHelper {
 
-    fun validateTradeMarks(marks: Array<String>): String? {
+   /* fun validateTradeMarks(marks: Array<String>): String? {
         if (marks.isEmpty()) return null
         val permitted = CarsHelper.getPossibleMarks()
         val bad = marks.filter { !permitted.contains(it) }
@@ -43,6 +40,6 @@ object ValidationHelper {
         val bad = if (permitted.contains(sort)) null else sort
         return if (bad.isNullOrEmpty()) null
         else wrongArguments(listOf(bad), "<a href = http://84.201.139.189:8080/devApi/info/cars/sorts>Список</a>")
-    }
+    }*/
 
 }

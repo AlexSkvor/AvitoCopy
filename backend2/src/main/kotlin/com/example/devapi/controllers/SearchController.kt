@@ -1,17 +1,8 @@
 package com.example.devapi.controllers
 
-import com.example.devapi.CODE_SUCCESS
-import com.example.devapi.STATUS_SUCCESS
-import com.example.devapi.controllers.CarsHelper.errorResponse
-import com.example.devapi.controllers.CarsHelper.getCars
-import com.example.devapi.controllers.ValidationHelper.validateBodyTypes
-import com.example.devapi.controllers.ValidationHelper.validateColors
-import com.example.devapi.controllers.ValidationHelper.validateModels
-import com.example.devapi.controllers.ValidationHelper.validateSort
-import com.example.devapi.controllers.ValidationHelper.validateTradeMarks
 import com.example.devapi.entities.front.FrontCar
-import com.example.devapi.extensions.*
 import com.example.devapi.responses.BaseResponse
+import com.example.devapi.utils.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -41,7 +32,7 @@ class SearchController {
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int
     ): BaseResponse<FrontCar> {
 
-        val cars = getCars()
+        /*val cars = getCars()
         if (cars.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf())
 
         validateTradeMarks(tradeMarks)?.let { return errorResponse(it) }
@@ -66,9 +57,9 @@ class SearchController {
         val medianCost = middleCost(temp)
 
         val data = temp.withSkipTake(skip, take).toTypedArray()
-        data.setIds()
+        data.setIds()*/
 
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, medianCost = medianCost)
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf())
     }
 
     private fun tradeMarksFilter(car: FrontCar, marks: Array<String>): Boolean {

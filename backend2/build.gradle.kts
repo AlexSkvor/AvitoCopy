@@ -29,7 +29,7 @@ dependencies {
     implementation( "com.google.code.gson:gson:2.8.5")
     implementation("org.jsoup:jsoup:1.12.1")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("com.h2database:h2:1.4.194")
+    runtimeOnly("com.h2database:h2:1.4.197")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

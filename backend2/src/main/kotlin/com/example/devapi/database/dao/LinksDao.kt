@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository
 import java.util.*
 
 interface LinksDao : CrudRepository<LinkEntity, String> {
-    //MERGE INTO TABLE STACKOVERFLOW('abc'); - insert with replace on conflict
 
     @Query("from LinkEntity as l where l.lastCheck = :parameterToTheFunction and l.source = :site")
     fun getByDate(parameterToTheFunction: Date, site: String): List<LinkEntity>
@@ -19,6 +18,12 @@ interface LinksDao : CrudRepository<LinkEntity, String> {
 
     @Query("SELECT COUNT(*) FROM LINKS where LOADED = 0 and SOURCE = :site", nativeQuery = true)
     fun nonLoadedCount(site: String): Int
+
+    @Query("SELECT DISTINCT CITY FROM LINKS", nativeQuery = true)
+    fun getAllCities(): List<String>
+
+    @Query("SELECT DISTINCT CITY FROM LINKS WHERE LOADED = 'true'", nativeQuery = true)
+    fun getLoadedCities(): List<String>
 }
 
 fun LinksDao.getOldest(source: String): LinkEntity {

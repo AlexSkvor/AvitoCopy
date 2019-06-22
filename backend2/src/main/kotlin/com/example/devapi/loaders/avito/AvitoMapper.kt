@@ -1,8 +1,8 @@
 package com.example.devapi.loaders.avito
 
 import com.example.devapi.database.entities.CarEntity
-import com.example.devapi.extensions.antiSpace
-import com.example.devapi.extensions.toIntOr
+import com.example.devapi.utils.antiSpace
+import com.example.devapi.utils.toIntOr
 import java.util.*
 
 object AvitoMapper {

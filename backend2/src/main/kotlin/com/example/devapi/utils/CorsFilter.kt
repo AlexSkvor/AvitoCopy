@@ -1,4 +1,4 @@
-package com.example.devapi
+package com.example.devapi.utils
 
 import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletResponse

@@ -1,5 +1,6 @@
-package com.example.devapi.extensions
+package com.example.devapi.utils
 
+import java.io.File
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
@@ -29,7 +30,7 @@ fun String.lessEqualsThen(num: Int): Boolean {
         if (this.isEmpty()) false
         else this.filterDigits().toInt() <= num
     } catch (e: Exception) {
-        println("lessEqualsThen $e")
+        alsoPrintDebug("lessEqualsThen $e")
         false
     }
 }
@@ -39,7 +40,7 @@ fun String.biggerEqualsThen(num: Int): Boolean {
         if (this.isEmpty()) false
         else this.filterDigits().toInt() >= num
     } catch (e: Exception) {
-        println("biggerEqualsThen $e")
+        alsoPrintDebug("biggerEqualsThen $e")
         false
     }
 }
@@ -69,9 +70,20 @@ fun <T> List<List<T>>.merge(): List<T> {
 }
 
 fun <T> T.alsoPrintDebug(msg: String = ""): T {
+    val file = File(fileLog)
+    if (!file.exists()) file.writeText("")
+    file.appendText(msg + "\n")
     println("$msg...........$this")
     return this
 }
+
+fun loggedTry(block: () -> Unit) =
+        try {
+            block()
+        } catch (e: Exception) {
+            e.alsoPrintDebug("Error")
+        }
+
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")

@@ -5,6 +5,7 @@ package com.example.devapi.entities.front
  * @author AlexSkvor
  * */
 
+@Deprecated("delete after replacing new class")
 data class FrontCar(
         var id: String = "0",
         val originalUrl: String = "",
@@ -17,8 +18,5 @@ data class FrontCar(
         val year: String = "",
         val bodyType: String = "",
         val steeringSide: String = "",
-        val mileage: String = "",
-        val additionalInfo: AdditionalCarInfo = AdditionalCarInfo(),
-        val advancedInfo: AdvancedInfo = AdvancedInfo()
-) {
-}
+        val mileage: String = ""
+)
