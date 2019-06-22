@@ -1,6 +1,7 @@
 package com.example.devapi.extensions
 
 import java.lang.Exception
+import java.text.SimpleDateFormat
 
 fun <T> List<T>.withSkipTake(skip: Int, take: Int): List<T> {
     return when {
@@ -55,6 +56,12 @@ fun String.toIntOrZero(): Int = try {
     0
 }
 
+fun String?.toIntOr(default: Int): Int = try {
+    this?.toInt() ?: default
+} catch (e: Exception) {
+    default
+}
+
 fun <T> List<List<T>>.merge(): List<T> {
     val result = mutableListOf<T>()
     this.forEach { result += it }
@@ -65,3 +72,6 @@ fun <T> T.alsoPrintDebug(msg: String = ""): T {
     println("$msg...........$this")
     return this
 }
+
+val dateFormat: SimpleDateFormat
+    get() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")

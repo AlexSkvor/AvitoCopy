@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "LINKS")
 data class LinkEntity(
         @Id
-        @Column(name = "url", nullable = false, unique = true, length = 511)//MERGE INTO TABLE STACKOVERFLOW('abc'); - insert with replace on conflict
+        @Column(name = "url", nullable = false, unique = true, length = 511)
         val url: String = "",
 
         @Temporal(TemporalType.TIMESTAMP)
@@ -18,7 +18,8 @@ data class LinkEntity(
         var loaded: Boolean = false,
 
         @Column(name = "source", nullable = false)
-        val source: String = ""
-) {
+        val source: String = "",
 
-}
+        @Column(name = "city", nullable = false)
+        val city: String = ""
+)

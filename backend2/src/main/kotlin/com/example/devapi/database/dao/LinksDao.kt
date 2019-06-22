@@ -6,29 +6,37 @@ import org.springframework.data.repository.CrudRepository
 import java.util.*
 
 interface LinksDao : CrudRepository<LinkEntity, String> {
+    //MERGE INTO TABLE STACKOVERFLOW('abc'); - insert with replace on conflict
 
-    @Query("from LinkEntity as l where l.lastCheck = :parameterToTheFunction")
-    fun getByDate(parameterToTheFunction: Date): List<LinkEntity>
+    @Query("from LinkEntity as l where l.lastCheck = :parameterToTheFunction and l.source = :site")
+    fun getByDate(parameterToTheFunction: Date, site: String): List<LinkEntity>
 
-    @Query("select min(link.lastCheck) from LinkEntity link")
-    fun getMinDate(): Date
+    @Query("select min(link.lastCheck) from LinkEntity link where link.source = :site")
+    fun getMinDate(site: String): Date
 
-    /*@Query("SELECT FIRST FROM LinkEntity WHERE loaded = false")
-    fun getNonLoaded(): LinkEntity
+    @Query("select top 1 * FROM LINKS where LOADED = 0 and SOURCE = :site", nativeQuery = true)
+    fun getNonLoaded(site: String): LinkEntity
 
-    @Query("UPDATE LinkEntity SET loaded = true WHERE url = loadedUrl")
-    fun notifyLoaded(loadedUrl: String)
-
-    @Query("UPDATE LinkEntity SET lastCheck = time WHERE url = loadedUrl")
-    fun setUpdatedTime(loadedUrl: String, time: Date = Date())
-
-    @Query("SELECT ALL FROM LinkEntity WHERE source = 'Avito'")
-    fun all(): List<LinkEntity>*/
+    @Query("SELECT COUNT(*) FROM LINKS where LOADED = 0 and SOURCE = :site", nativeQuery = true)
+    fun nonLoadedCount(site: String): Int
 }
 
-fun LinksDao.getOldest(): LinkEntity{
-    val minDate = getMinDate()
-    //val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")
-    //dateFormat.format(ans.lastCheck).alsoPrintDebug("old")
-    return getByDate(minDate).first()
+fun LinksDao.getOldest(source: String): LinkEntity {
+    val minDate = getMinDate(source)
+    return getByDate(minDate, source).first()
 }
+
+fun LinksDao.nextLink(source: String): LinkEntity {
+    return if (nonLoadedCount(source) > 0) getNonLoaded(source)
+    else getOldest(source)
+}
+
+fun LinksDao.replace(newEntity: LinkEntity){
+    deleteById(newEntity.url)
+    save(newEntity)
+}
+
+fun LinksDao.nextAvitoLink() = nextLink("Avito")
+
+val LinksDao.empty: Boolean
+    get() = count() < 1
