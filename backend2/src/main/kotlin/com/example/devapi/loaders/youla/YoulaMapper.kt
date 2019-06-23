@@ -1,6 +1,7 @@
 package com.example.devapi.loaders.youla
 
 import com.example.devapi.database.entities.CarEntity
+import com.example.devapi.utils.antiSpace
 import com.example.devapi.utils.filterDigits
 import com.example.devapi.utils.toIntOr
 import com.example.devapi.utils.youla
@@ -21,23 +22,23 @@ object YoulaMapper {
                 year = map["Год выпуска"]?.filterDigits().toIntOr(-1),
                 mileage = map["Пробег"]?.filterDigits().toIntOr(-1),
                 source = youla,
-                city = city,
+                city = city.antiSpace(),
                 imageUrl = photo,
-                tradeMark = map["Марка"] ?: "",
-                model = map["Модель"] ?: "",
-                generation = map["Поколение"] ?: "",
-                color = map["Цвет"] ?: "",
-                driveUnit = map["Привод"] ?: "",
-                bodyType = map["Кузов"]?.substringBefore(" ") ?: "",
-                steeringSide = map["Руль"] ?: "",
-                comment = map["Комментарий"] ?: "",
-                ptsOwners = map["Владельцев"] ?: "",
-                doorsNumber = map["Кузов"]?.substringAfter(" ") ?: "",
-                engineType = map["Двигатель"]?.substringBefore(" ") ?: "",
-                salon = map["Экстерьер и салон"] ?: "",
-                climateControl = map["Комфорт"] ?: "",
-                antitheftSystem = map["Безопасность"] ?: "",
-                multimediaAndNavigation = map["Мультимедиа и электроника"] ?: ""
+                tradeMark = map["Марка"].antiSpace(),
+                model = map["Модель"].antiSpace(),
+                generation = map["Поколение"].antiSpace(),
+                color = map["Цвет"].antiSpace(),
+                driveUnit = map["Привод"].antiSpace(),
+                bodyType = map["Кузов"]?.substringBefore(" ").antiSpace(),
+                steeringSide = map["Руль"].antiSpace(),
+                comment = map["Комментарий"].antiSpace(),
+                ptsOwners = map["Владельцев"].antiSpace(),
+                doorsNumber = map["Кузов"]?.substringAfter(" ").antiSpace(),
+                engineType = map["Двигатель"]?.substringBefore(" ").antiSpace(),
+                salon = map["Экстерьер и салон"].antiSpace(),
+                climateControl = map["Комфорт"].antiSpace(),
+                antitheftSystem = map["Безопасность"].antiSpace(),
+                multimediaAndNavigation = map["Мультимедиа и электроника"].antiSpace()
         )
     }
 }

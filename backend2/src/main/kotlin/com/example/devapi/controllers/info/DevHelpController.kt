@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi.controllers.info
 
 import com.example.devapi.utils.address
 import com.example.devapi.utils.version

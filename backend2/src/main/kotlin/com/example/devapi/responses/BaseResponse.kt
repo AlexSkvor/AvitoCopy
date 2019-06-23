@@ -5,22 +5,24 @@ package com.example.devapi.responses
  * @author AlexSkvor
  * */
 
-class BaseResponse<T>(status: String, code: Int, data: Array<T>, message: String = "", medianCost: Int = 0) {
+class BaseResponse<T>(val status: String,
+                      val code: Int,
+                      val data: Array<T>,
+                      val message: String = "",
+                      val medianCost: Int = 0,
+                      val medianMileage: Int = 0) {
 
-    var status: String = status
-        private set
+    /*val status: String = status
 
-    var code: Int = code
-        private set
+    val code: Int = code
 
-    var data: Array<T> = data
-        private set
+    val data: Array<T> = data
 
-    var message: String = message
-        private set
+    val message: String = message
 
-    var medianCost = medianCost
-        private set
+    val medianCost = medianCost
+
+    val medianMileage = medianMileage*/
 
     val size: Int
         get() = data.size

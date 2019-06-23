@@ -3,6 +3,7 @@ package com.example.devapi.utils
 import java.io.File
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.util.*
 
 fun <T> List<T>.withSkipTake(skip: Int, take: Int): List<T> {
     return when {
@@ -102,3 +103,6 @@ fun String.containsOneOf(list: List<String>): Boolean {
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")
+
+fun Date.frontFormat(): String =
+        SimpleDateFormat("MM-dd-HH-mm").format(this)

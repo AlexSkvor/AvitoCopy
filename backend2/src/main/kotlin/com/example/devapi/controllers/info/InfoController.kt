@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi.controllers.info
 
 import com.example.devapi.utils.CODE_SUCCESS
 import com.example.devapi.utils.STATUS_SUCCESS

@@ -1,7 +1,5 @@
 package com.example.devapi.controllers
 
-import com.example.devapi.entities.front.FrontCar
-
 /**
  * Created on 6/22/2019
  * @author Alexey Ivanov
@@ -12,12 +10,12 @@ object OutbitFilter {
     data class CarComparable (
             val mark: String,
             val model: String,
-            val year: String,
+            val year: Int,
             val color: String,
             val driveUnit: String,
             val bodyType: String,
             val steeringSide: String,
-            val mileage: String
+            val mileage: Int
     )
 
     private fun comparableFromCar(car: FrontCar) : CarComparable {
