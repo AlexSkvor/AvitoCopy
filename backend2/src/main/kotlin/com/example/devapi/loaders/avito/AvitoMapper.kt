@@ -2,6 +2,7 @@ package com.example.devapi.loaders.avito
 
 import com.example.devapi.database.entities.CarEntity
 import com.example.devapi.utils.antiSpace
+import com.example.devapi.utils.avito
 import com.example.devapi.utils.toIntOr
 import java.util.*
 
@@ -25,7 +26,7 @@ object AvitoMapper {
                 city = city,
                 actualizationTime = Date(),
                 creationTime = creationTime,
-                source = "Avito",
+                source = avito,
                 price = price.filter { it in '0'..'9' }.toIntOr(-1),
                 year = map["Год выпуска:"]?.filter { it in '0'..'9' }.toIntOr(-1),
                 bodyType = map["Тип кузова:"].antiSpace(),

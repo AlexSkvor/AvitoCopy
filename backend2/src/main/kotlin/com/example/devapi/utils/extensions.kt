@@ -77,13 +77,21 @@ fun <T> T.alsoPrintDebug(msg: String = ""): T {
     return this
 }
 
-fun loggedTry(block: () -> Unit) =
-        try {
-            block()
-        } catch (e: Exception) {
-            e.alsoPrintDebug("Error")
-        }
+fun loggedTry(block: () -> Unit) {
+    try {
+        block()
+    } catch (e: Exception) {
+        e.stackTrace.alsoPrintDebug("Error")
+    }
+}
 
+fun List<String>.stringFormat(): String =
+        if (this.size == 1) this.first()
+        else {
+            var value = ""
+            this.forEach { value += "$it; " }
+            value
+        }
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")

@@ -4,6 +4,7 @@ import com.example.devapi.database.dao.*
 import com.example.devapi.database.entities.CarEntity
 import com.example.devapi.utils.alsoPrintDebug
 import com.example.devapi.utils.loggedTry
+import com.example.devapi.utils.stringFormat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.scheduling.annotation.Scheduled
@@ -23,7 +24,7 @@ class AvitoCarsLoader(
         private val linksRepository: LinksDao
 ) {
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000, initialDelay = 30_000)
     fun loadCars() {
         randomWait()
         if (linksRepository.empty) return
@@ -36,7 +37,8 @@ class AvitoCarsLoader(
                 linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))
             }
         } else {
-            carsRepository.deleteById(link.url)
+            if (carsRepository.existsById(link.url))
+                carsRepository.deleteById(link.url)
             linksRepository.deleteById(link.url)
         }
     }
@@ -77,7 +79,7 @@ class AvitoCarsLoader(
                 it.getElementsByClass("advanced-params-param-title").text() to it
                         .getElementsByClass("advanced-params-param-item")
                         .toList().map { attr -> attr.text() }
-            }.map { it.first to stringFormat(it.second) }.toMap()
+            }.map { it.first to it.second.stringFormat() }.toMap()
 
     private fun getPlacementDate(page: Document): Date {
         val str = page.body()
@@ -94,12 +96,4 @@ class AvitoCarsLoader(
             e.printStackTrace()
         }
     }
-
-    fun stringFormat(list: List<String>): String =
-            if (list.size == 1) list.first()
-            else {
-                var value = ""
-                list.forEach { value += "$it; " }
-                value
-            }
 }
