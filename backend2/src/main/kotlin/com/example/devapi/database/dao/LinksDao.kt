@@ -1,6 +1,9 @@
 package com.example.devapi.database.dao
 
 import com.example.devapi.database.entities.LinkEntity
+import com.example.devapi.utils.avito
+import com.example.devapi.utils.avtoRu
+import com.example.devapi.utils.youla
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.util.*
@@ -41,7 +44,9 @@ fun LinksDao.replace(newEntity: LinkEntity){
     save(newEntity)
 }
 
-fun LinksDao.nextAvitoLink() = nextLink("Avito")
+fun LinksDao.nextAvitoLink() = nextLink(avito)
+fun LinksDao.nextYoulaLink() = nextLink(youla)
+fun LinksDao.nextAvtoRuLink() = nextLink(avtoRu)
 
 val LinksDao.empty: Boolean
     get() = count() < 1

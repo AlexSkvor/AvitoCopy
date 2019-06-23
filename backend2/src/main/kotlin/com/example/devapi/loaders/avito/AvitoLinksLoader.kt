@@ -25,7 +25,7 @@ class AvitoLinksLoader(private val repository: LinksDao) {
         saveLinks(1)
     }
 
-    fun saveLinks(i: Int) {
+    private fun saveLinks(i: Int) {
         val links = getLinks(i).map { LinkEntity(it, Date(), loaded = false, source = "Avito", city = getCity(it)) }
         val filtered = links.filter { !repository.existsById(it.url) }
         repository.saveAll(filtered)
