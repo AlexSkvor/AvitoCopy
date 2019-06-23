@@ -93,5 +93,12 @@ fun List<String>.stringFormat(): String =
             value
         }
 
+fun String.containsOneOf(list: List<String>): Boolean {
+    list.forEach {
+        if (this.contains(it)) return true
+    }
+    return false
+}
+
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S")

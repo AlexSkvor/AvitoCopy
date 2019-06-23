@@ -18,7 +18,7 @@ class YoulaCarsLoader(
         private val linksRepository: LinksDao
 ) {
 
-    @Scheduled(fixedRate = 3000, initialDelay = 0)
+    @Scheduled(fixedRate = 5000, initialDelay = 30_000)
     fun loadCars() {
         randomWait()
         if (linksRepository.empty) return
@@ -27,9 +27,8 @@ class YoulaCarsLoader(
         val car = carFromLink(link.url, link.city)
         if (car != null) {
             loggedTry {
-                car.alsoPrintDebug("AAAAAAAAAAAA")
-                /*carsRepository.insertReplace(car)
-                linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))*/
+                carsRepository.insertReplace(car)
+                linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))
             }
         } else {
             if (carsRepository.existsById(link.url))
@@ -50,7 +49,7 @@ class YoulaCarsLoader(
                     original = link,
                     city = city,
                     photo = getPhoto(page),
-                    creationTime = creationTime(page)
+                    creationTime = Date()
             )
 
         } catch (e: Exception) {
@@ -58,12 +57,6 @@ class YoulaCarsLoader(
             e.alsoPrintDebug("Error happened")
             null
         }
-    }
-
-    private fun creationTime(page: Document): Date {
-        val str = page.body().getElementsByClass("SellerInfo_infoRow__1rFTA")
-                .text()?.alsoPrintDebug("Date probably") ?: ""
-        return YoulaPlacementDateParser.parseDate(str)
     }
 
     private fun getPhoto(page: Document): String =

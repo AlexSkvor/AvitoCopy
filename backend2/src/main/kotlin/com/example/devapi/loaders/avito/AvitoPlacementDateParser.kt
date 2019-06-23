@@ -1,6 +1,7 @@
 package com.example.devapi.loaders.avito
 
 import com.example.devapi.utils.antiSpace
+import com.example.devapi.utils.filterDigits
 import com.example.devapi.utils.toIntOrZero
 import java.util.*
 
@@ -45,13 +46,13 @@ object AvitoPlacementDateParser {
     }
 
     private fun day(str: String): Int = str.substring(0, 2)
-            .filter { it in '0'..'9' }.trim().toIntOrZero()
+            .filterDigits().trim().toIntOrZero()
 
     private fun hour(str: String): Int = str.substring(str.length - 5, str
-            .lastIndexOf(':')).filter { it in '0'..'9' }.trim().toIntOrZero()
+            .lastIndexOf(':')).filterDigits().trim().toIntOrZero()
 
     private fun minute(str: String): Int = str.substring(str.lastIndexOf(':'), str.length)
-            .filter { it in '0'..'9' }.trim().toIntOrZero()
+            .filterDigits().trim().toIntOrZero()
 
     private fun date(month: Int, str: String): Date =
             Calendar.getInstance().setup()
