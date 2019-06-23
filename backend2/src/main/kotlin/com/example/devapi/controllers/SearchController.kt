@@ -22,8 +22,6 @@ class SearchController(
     @GetMapping("/cars")
     fun searchCars(@RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
                    @RequestParam(value = "take", required = false, defaultValue = "20") take: Int,
-            //@RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>,TODO both to body!
-            //@RequestParam(value = "models", required = false, defaultValue = "") models: Array<String>,TODO
                    @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
                    @RequestParam(value = "bodyTypes", required = false, defaultValue = "") bodyTypes: Array<String>,
                    @RequestParam(value = "sort", required = false, defaultValue = "Дешевые") sort: String,
@@ -33,16 +31,17 @@ class SearchController(
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int,
                    @RequestParam(value = "dangerMileage", required = false, defaultValue = "50") dangerMileage: Int, //percents
                    @RequestParam(value = "dangerPrice", required = false, defaultValue = "50") dangerPrice: Int, //percents
-                   @RequestParam(value = "city", required = false, defaultValue = "") cities: Array<String>
+                   @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
+                   @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>
     ): BaseResponse<FrontCar> {
-        //TODO docs and info and help!!!
         //TODO outbit, models and marks
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
-                .asSequence()
                 .map { FrontCar(it) }
+                .asSequence()
                 .filter { colorsFilter(it, colors) }
                 .filter { bodyTypesFilter(it, bodyTypes) }
                 .filter { citiesFilter(it, cities) }
+                .filter { sourcesFilter(it, sources) }
                 .toList()
                 .sortedByType(sort)
 
@@ -51,9 +50,6 @@ class SearchController(
         data.setIds()
         data.setDangerouslyMileageFlags(dangerMileage, middleMileage)
         data.setDangerouslyPriceFlags(dangerPrice, middlePrice)
-
-        /*.filter { tradeMarksFilter(it, tradeMarks) }
-          .filter { modelsFilter(it, models) }*/
 
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, medianCost = middlePrice, medianMileage = middleMileage)
     }
@@ -64,6 +60,10 @@ class SearchController(
 
     private fun citiesFilter(car: FrontCar, cities: Array<String>): Boolean {
         return cities.isEmpty() || cities.contains(car.city)
+    }
+
+    private fun sourcesFilter(car: FrontCar, sources: Array<String>): Boolean {
+        return sources.isEmpty() || sources.contains(car.source)
     }
 
     private fun bodyTypesFilter(car: FrontCar, bodyTypes: Array<String>): Boolean {

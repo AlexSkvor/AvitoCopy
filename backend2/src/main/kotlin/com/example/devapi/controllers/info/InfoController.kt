@@ -23,9 +23,11 @@ class InfoController(
 ) {
 
     @GetMapping("/cars/count")
-    fun getTotalMarksNumber(): BaseResponse<Int> {
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsRepository.count().toInt()))
-    }
+    fun getTotalMarksNumber(
+            @RequestParam(value = "source", required = false, defaultValue = "") source: String
+    ): BaseResponse<Int> =
+            if (source.isEmpty()) BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsRepository.count().toInt()))
+            else BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, arrayOf(carsRepository.countBySource(source)))
 
     @GetMapping("/cars/cities")
     fun getCities(@RequestParam(value = "all", required = false, defaultValue = "false") all: String): BaseResponse<String> {
@@ -34,37 +36,32 @@ class InfoController(
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, ans.toTypedArray())
     }
 
-    /*@GetMapping("/cars/tradeMarks")
-    fun getTradeMarksList(): BaseResponse<String> {
-        val data = getPossibleMarks().toTypedArray()
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
-    }
+    @GetMapping("/cars/tradeMarks")
+    fun getTradeMarksList(): BaseResponse<String> =
+            BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, carsRepository.getTradeMarks().toTypedArray())
 
     @GetMapping("/cars/colors")
-    fun getColorsList(): BaseResponse<String> {
-        val data = getPossibleColors().toTypedArray()
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
-    }
+    fun getColorsList(): BaseResponse<String> =
+            BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, carsRepository.getColors().toTypedArray())
+
 
     @GetMapping("/cars/bodyTypes")
-    fun getBodyTypesList(): BaseResponse<String> {
-        val data = getPossibleBodyTypes().toTypedArray()
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
-    }
+    fun getBodyTypesList(): BaseResponse<String> =
+            BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, carsRepository.getBodyTypes().toTypedArray())
+
+    @GetMapping("/cars/sources")
+    fun getSources(): BaseResponse<String> =
+            BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, carsRepository.getSources().toTypedArray())
 
     @GetMapping("/cars/sorts")
     fun getSortsList(): BaseResponse<String> {
-        val data = getPossibleSorts().toTypedArray()
+        val data = arrayOf("Старые", "Новые", "Дешевые", "Дорогие", "Большой_пробег", "Маленький_пробег")
         return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
     }
 
     @GetMapping("/cars/models")
     fun getModelsList(
-            @RequestParam(value = "tradeMarks", required = false, defaultValue = "") tradeMarks: Array<String>
-    ): BaseResponse<String> {
-        ValidationHelper.validateTradeMarks(tradeMarks)?.let { return errorResponse(it) }
-        if (tradeMarks.isEmpty()) return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, getPossibleModels().list.map { it.models }.merge().toTypedArray())
-        val data = getPossibleModels().list.filter { tradeMarks.contains(it.tradeMark) }.map { it.models }.merge().toTypedArray()
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
-    }*/
+            @RequestParam(value = "tradeMark", required = true) tradeMark: String
+    ): BaseResponse<String> =
+            BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, carsRepository.getModelsWithTradeMark(tradeMark).toTypedArray())
 }

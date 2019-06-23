@@ -24,27 +24,7 @@ fun wrongArguments(contained: List<*>, seePermitted: String): String {
 
 val antiSpacePattern = "\\s+".toRegex()
 fun String?.antiSpace() =
-        this?.trim()?.replace(antiSpacePattern, " ") ?: ""
-
-fun String.lessEqualsThen(num: Int): Boolean {
-    return try {
-        if (this.isEmpty()) false
-        else this.filterDigits().toInt() <= num
-    } catch (e: Exception) {
-        alsoPrintDebug("lessEqualsThen $e")
-        false
-    }
-}
-
-fun String.biggerEqualsThen(num: Int): Boolean {
-    return try {
-        if (this.isEmpty()) false
-        else this.filterDigits().toInt() >= num
-    } catch (e: Exception) {
-        alsoPrintDebug("biggerEqualsThen $e")
-        false
-    }
-}
+        this?.trim()?.replace(antiSpacePattern, " ")?.toLowerCase() ?: ""
 
 fun String.toIntOrBig(): Int = try {
     this.toInt()

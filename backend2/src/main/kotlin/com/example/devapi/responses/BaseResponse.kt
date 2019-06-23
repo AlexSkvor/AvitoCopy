@@ -11,19 +11,6 @@ class BaseResponse<T>(val status: String,
                       val message: String = "",
                       val medianCost: Int = 0,
                       val medianMileage: Int = 0) {
-
-    /*val status: String = status
-
-    val code: Int = code
-
-    val data: Array<T> = data
-
-    val message: String = message
-
-    val medianCost = medianCost
-
-    val medianMileage = medianMileage*/
-
     val size: Int
         get() = data.size
 }

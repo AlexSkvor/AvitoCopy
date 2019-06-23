@@ -59,15 +59,17 @@ fun Array<FrontCar>.setIds() {
 }
 
 fun Array<FrontCar>.setDangerouslyMileageFlags(danger: Int, middle: Int) {
+    val m = if (middle == 0) 1L else middle.toLong()
     this.forEach {
-        if (it.mileage.toLong() / middle.toLong() + danger.toLong() / 100 < 1L) it.dangerouslyLowMileage = true
-        if (it.mileage.toLong() / middle.toLong() - danger.toLong() / 100 > 1L) it.dangerouslyHighMileage = true
+        if (it.mileage.toLong() / m + danger.toLong() / 100 < 1L) it.dangerouslyLowMileage = true
+        if (it.mileage.toLong() / m - danger.toLong() / 100 > 1L) it.dangerouslyHighMileage = true
     }
 }
 
 fun Array<FrontCar>.setDangerouslyPriceFlags(danger: Int, middle: Int) {
+    val m = if (middle == 0) 1L else middle.toLong()
     this.forEach {
-        if (it.price.toLong() / middle.toLong() + danger.toLong() / 100 < 1L) it.dangerouslyLowPrice = true
-        if (it.price.toLong() / middle.toLong() - danger.toLong() / 100 > 1L) it.dangerouslyHighPrice = true
+        if (it.price.toLong() / m + danger.toLong() / 100 < 1L) it.dangerouslyLowPrice = true
+        if (it.price.toLong() / m - danger.toLong() / 100 > 1L) it.dangerouslyHighPrice = true
     }
 }
