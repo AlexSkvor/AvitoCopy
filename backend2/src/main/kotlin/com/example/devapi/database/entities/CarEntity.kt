@@ -22,7 +22,7 @@ data class CarEntity(
         val price: Int = -1, //Цена
 
         @Column(name = "year", nullable = false)
-        val year: Int = -1, //Год выпуска //TODO don't forget to use -1 as broken value!
+        val year: Int = -1, //Год выпуска
 
         @Column(name = "mileage", nullable = false)
         val mileage: Int = -1, //Пробег

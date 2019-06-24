@@ -36,9 +36,9 @@ class SearchController(
                    @RequestParam(value = "dangerPrice", required = false, defaultValue = "50") dangerPrice: Int,
                    @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
                    @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>,
+                   @RequestParam(value = "filterResellers", required = false, defaultValue = "false") filterResellers: Boolean,
                    @RequestBody(required = false) tradeMarksRequest: TradeMarksRequest?
     ): BaseResponse<FrontCar> {
-        //TODO reseller, models and marks
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
                 .map { FrontCar(it) }
                 .asSequence()
@@ -48,6 +48,7 @@ class SearchController(
                 .filter { sourcesFilter(it, sources) }
                 .filter { tradeMarksFilter(it, tradeMarksRequest?.marksAndModels) }
                 .toList()
+                .filterResellers(filterResellers)
                 .sortedByType(sort)
 
         val (middlePrice, middleMileage) = middleCostAndMileage(cars)
@@ -88,6 +89,9 @@ class SearchController(
         }
         return false
     }
+
+    private fun List<FrontCar>.filterResellers(filter: Boolean): List<FrontCar> =
+            if (filter) ResellersFilter.filter(this) else this
 
     private fun middleCostAndMileage(cars: List<FrontCar>): Pair<Int, Int> {
         if (cars.isEmpty()) return Pair(1, 1)
