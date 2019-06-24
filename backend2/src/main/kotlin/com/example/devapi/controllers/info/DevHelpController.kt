@@ -117,7 +117,7 @@ class DevHelpController {
                 "$tab Описание(Выдавать в ответе машины, продающиеся в одном из городов списка)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
-                "$tab <a href = $address/search/cars?cities=kaliningrad>Пример</a><br>"
+                "$tab <a href = $address/search/cars?cities=Калининград>Пример</a><br>"
 
         instructions += "${bt}sources: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/cars/sources>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины, сведения о которых получены из указанных источников)<br>" +
