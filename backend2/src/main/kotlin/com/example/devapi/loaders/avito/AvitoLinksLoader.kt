@@ -2,6 +2,7 @@ package com.example.devapi.loaders.avito
 
 import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.database.entities.LinkEntity
+import com.example.devapi.utils.avito
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import org.springframework.scheduling.annotation.Scheduled
@@ -26,7 +27,7 @@ class AvitoLinksLoader(private val repository: LinksDao) {
     }
 
     private fun saveLinks(i: Int) {
-        val links = getLinks(i).map { LinkEntity(it, Date(), loaded = false, source = "Avito", city = getCity(it)) }
+        val links = getLinks(i).map { LinkEntity(it, Date(), loaded = false, source = avito, city = getCity(it)) }
         val filtered = links.filter { !repository.existsById(it.url) }
         repository.saveAll(filtered)
     }

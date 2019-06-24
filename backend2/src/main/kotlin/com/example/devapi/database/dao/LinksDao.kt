@@ -4,8 +4,11 @@ import com.example.devapi.database.entities.LinkEntity
 import com.example.devapi.utils.avito
 import com.example.devapi.utils.avtoRu
 import com.example.devapi.utils.youla
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
+import org.springframework.transaction.annotation.Propagation
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface LinksDao : CrudRepository<LinkEntity, String> {
@@ -27,6 +30,11 @@ interface LinksDao : CrudRepository<LinkEntity, String> {
 
     @Query("SELECT DISTINCT CITY FROM LINKS WHERE LOADED = 'true'", nativeQuery = true)
     fun getLoadedCities(): List<String>
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Modifying
+    @Query(value = "update LinkEntity c set c.city = :newValue where c.city = :old")
+    fun replaceCity(old: String, newValue: String)
 }
 
 fun LinksDao.getOldest(source: String): LinkEntity {
