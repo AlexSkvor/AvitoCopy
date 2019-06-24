@@ -3,7 +3,7 @@ package com.example.devapi.database
 import com.example.devapi.database.dao.CarsDao
 import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.database.entities.Dumps
-import com.example.devapi.responses.BaseResponse
+import com.example.devapi.controllers.responses.BaseResponse
 import com.example.devapi.utils.*
 import com.google.gson.Gson
 import org.springframework.scheduling.annotation.Scheduled

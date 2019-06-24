@@ -1,9 +1,12 @@
 package com.example.devapi.controllers
 
+import com.example.devapi.controllers.requests.MarkWithModels
+import com.example.devapi.controllers.requests.TradeMarksRequest
 import com.example.devapi.database.dao.CarsDao
-import com.example.devapi.responses.BaseResponse
+import com.example.devapi.controllers.responses.BaseResponse
 import com.example.devapi.utils.*
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -29,12 +32,13 @@ class SearchController(
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "99999999") maxPrice: Int,
                    @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int,
-                   @RequestParam(value = "dangerMileage", required = false, defaultValue = "50") dangerMileage: Int, //percents
-                   @RequestParam(value = "dangerPrice", required = false, defaultValue = "50") dangerPrice: Int, //percents
+                   @RequestParam(value = "dangerMileage", required = false, defaultValue = "50") dangerMileage: Int,
+                   @RequestParam(value = "dangerPrice", required = false, defaultValue = "50") dangerPrice: Int,
                    @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
-                   @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>
+                   @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>,
+                   @RequestBody(required = false) tradeMarksRequest: TradeMarksRequest?
     ): BaseResponse<FrontCar> {
-        //TODO outbit, models and marks
+        //TODO reseller, models and marks
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
                 .map { FrontCar(it) }
                 .asSequence()
@@ -42,6 +46,7 @@ class SearchController(
                 .filter { bodyTypesFilter(it, bodyTypes) }
                 .filter { citiesFilter(it, cities) }
                 .filter { sourcesFilter(it, sources) }
+                .filter { tradeMarksFilter(it, tradeMarksRequest?.marksAndModels) }
                 .toList()
                 .sortedByType(sort)
 
@@ -68,6 +73,20 @@ class SearchController(
 
     private fun bodyTypesFilter(car: FrontCar, bodyTypes: Array<String>): Boolean {
         return bodyTypes.isEmpty() || bodyTypes.contains(car.bodyType)
+    }
+
+    private fun tradeMarksFilter(car: FrontCar, marksAndModels: List<MarkWithModels>?): Boolean {
+        if (marksAndModels == null) return true
+
+        marksAndModels.forEach {
+            if (it.mark.contains(car.tradeMark)) {
+                it.models.forEach { model ->
+                    if (model.contains(car.model))
+                        return true
+                }
+            }
+        }
+        return false
     }
 
     private fun middleCostAndMileage(cars: List<FrontCar>): Pair<Int, Int> {
