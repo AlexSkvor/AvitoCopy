@@ -39,6 +39,7 @@ class SearchController(
                    @RequestParam(value = "filterResellers", required = false, defaultValue = "false") filterResellers: Boolean,
                    @RequestBody(required = false) tradeMarksRequest: TradeMarksRequest?
     ): BaseResponse<FrontCar> {
+
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
                 .map { FrontCar(it) }
                 .asSequence()
@@ -77,10 +78,11 @@ class SearchController(
     }
 
     private fun tradeMarksFilter(car: FrontCar, marksAndModels: List<MarkWithModels>?): Boolean {
-        if (marksAndModels == null) return true
+        if (marksAndModels.isNullOrEmpty()) return true
 
         marksAndModels.forEach {
             if (it.mark.contains(car.tradeMark)) {
+                if (it.models.isEmpty()) return true
                 it.models.forEach { model ->
                     if (model.contains(car.model))
                         return true

@@ -125,6 +125,18 @@ class DevHelpController {
                 "$tab По умолчанию(не задан)<br>" +
                 "$tab <a href = $address/search/cars?sources=Youla>Пример</a><br>"
 
+        instructions += "${bt}filterResellers: <br>$tab Валидация(true/false/не задан)<br>" +
+                "$tab Описание(Если задан true, отфильтрует перекупов)<br>" +
+                "$tab Обязательный(НЕТ)<br>" +
+                "$tab По умолчанию(false)<br>" +
+                "$tab <a href = $address/search/cars?filterResellers=true&take=1000>Пример</a><br>"
+
+        instructions += "<br><br>${bt}Тело запроса: <br>$tab Валидация(должен иметь вид {\"marksAndModels\" : [{\"mark\":\"audi\", \"models\":[\"a3\",\"a7\"]}, {\"mark\":\"reanault\", \"models\":[\"logan\"]}]} или не задан)<br>" +
+                "$tab Описание(Если задано, то выдача будет отфильтрована по указанным маркам и соответствующим им моделям)<br>" +
+                "$tab Обязательный(НЕТ)<br>" +
+                "$tab По умолчанию(не задано)<br>" +
+                "$tab Как задать в HTML запросе не знаю, так что примера НЕТУ<br><br><br>"
+
         instructions += "<a href = $address/help/>Вернуться к списку API</a>"
         return instructions
     }
