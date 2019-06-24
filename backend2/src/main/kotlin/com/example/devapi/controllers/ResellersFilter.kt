@@ -5,7 +5,7 @@ package com.example.devapi.controllers
  * @author Alexey Ivanov
  * */
 
-object OutbitFilter {
+object ResellersFilter {
 
     data class CarComparable (
             val mark: String,
@@ -34,9 +34,9 @@ object OutbitFilter {
     fun filter(cars: List<FrontCar>): List<FrontCar> {
         val carsMap = mutableMapOf<CarComparable, FrontCar>()
         cars.forEach {
-            val currentCar = carsMap.get(comparableFromCar(it))
+            val currentCar = carsMap[comparableFromCar(it)]
             if (currentCar == null || currentCar.price > it.price)
-                carsMap.put(comparableFromCar(it), it)
+                carsMap[comparableFromCar(it)] = it
         }
         return carsMap.values.toList()
     }

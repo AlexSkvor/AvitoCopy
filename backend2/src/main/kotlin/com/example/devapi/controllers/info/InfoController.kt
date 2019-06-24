@@ -4,7 +4,7 @@ import com.example.devapi.utils.CODE_SUCCESS
 import com.example.devapi.utils.STATUS_SUCCESS
 import com.example.devapi.database.dao.CarsDao
 import com.example.devapi.database.dao.LinksDao
-import com.example.devapi.responses.BaseResponse
+import com.example.devapi.controllers.responses.BaseResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

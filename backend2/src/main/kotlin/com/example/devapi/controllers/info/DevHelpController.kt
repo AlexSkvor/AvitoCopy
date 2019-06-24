@@ -32,7 +32,7 @@ class DevHelpController {
         instructions += "$version/info/cars/colors -> Все возможные цвета машин <a href = $address/info/cars/colors>Пример</a><br>"
         instructions += "$version/info/cars/sorts -> Все возможные сортировки машин <a href = $address/info/cars/sorts>Пример</a><br>"
         instructions += "$version/info/cars/bodyTypes -> Все возможные типы корпуса машин <a href = $address/info/cars/bodyTypes>Пример</a><br>"
-        instructions += "$version/info/cars/models -> Все возможные модели машин (ОБЯЗАТЕЛЬНЫЙ параметр tradeMark)<a href = $address/info/cars/models?tradeMark=Audi>Пример</a><br>"
+        instructions += "$version/info/cars/models -> Все возможные модели машин (ОБЯЗАТЕЛЬНЫЙ параметр tradeMark)<a href = $address/info/cars/models?tradeMark=audi>Пример</a><br>"
         instructions += "$version/info/cars/cities -> Города, по которым есть объявления в базе. \nДобавьте параметр ?all=true, чтобы увидеть ВСЕ города <a href = $address/info/cars/cities?all=true>Пример</a><br>"
         instructions += "$version/info/cars/sources -> Источники данных <a href = $address/info/cars/sources>Пример</a><br>"
 
@@ -124,6 +124,18 @@ class DevHelpController {
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
                 "$tab <a href = $address/search/cars?sources=Youla>Пример</a><br>"
+
+        instructions += "${bt}filterResellers: <br>$tab Валидация(true/false/не задан)<br>" +
+                "$tab Описание(Если задан true, отфильтрует перекупов)<br>" +
+                "$tab Обязательный(НЕТ)<br>" +
+                "$tab По умолчанию(false)<br>" +
+                "$tab <a href = $address/search/cars?filterResellers=true&take=1000>Пример</a><br>"
+
+        instructions += "<br><br>${bt}Тело запроса: <br>$tab Валидация(должен иметь вид {\"marksAndModels\" : [{\"mark\":\"audi\", \"models\":[\"a3\",\"a7\"]}, {\"mark\":\"reanault\", \"models\":[\"logan\"]}]} или не задан)<br>" +
+                "$tab Описание(Если задано, то выдача будет отфильтрована по указанным маркам и соответствующим им моделям)<br>" +
+                "$tab Обязательный(НЕТ)<br>" +
+                "$tab По умолчанию(не задано)<br>" +
+                "$tab Как задать в HTML запросе не знаю, так что примера НЕТУ<br><br><br>"
 
         instructions += "<a href = $address/help/>Вернуться к списку API</a>"
         return instructions

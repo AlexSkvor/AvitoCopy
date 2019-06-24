@@ -1,4 +1,4 @@
-package com.example.devapi.responses
+package com.example.devapi.controllers.responses
 
 /**
  * Created on 6/17/2019
