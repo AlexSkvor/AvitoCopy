@@ -5,103 +5,110 @@ import colorBase from "./colorBase"
 import markBase from "./markBase"
 import { isUndefined } from "util";
 
-let newDB=[0,1]
-function build_url(array){
-    let schet = [0,0,0]
-    var requestURL = 'http://84.201.139.189:8080/devApi/search/cars?skip=0&take=1000&'
-    for (let i = 0; i < array.length; i++) {
-        let tmpString = array[i]
-        for (let j = 0; j < colorBase.length; j++) {
-            if(tmpString.toLocaleLowerCase()==colorBase[j].toLocaleLowerCase()){
-                schet[i]=1
-                requestURL=requestURL+'colors='+colorBase[j] + '&'
-                break
-            }
-        }
-        for (let j = 0; j < markBase.length; j++) {
-            if(tmpString.toLocaleLowerCase()==markBase[j].toLocaleLowerCase()){
-                schet[i]=1
-                requestURL=requestURL+'tradeMarks='+ markBase[j] + '&'
-                break
-            }
-        }
-
-    }
-    let model_sum =''
-    for(let i = 0; i < array.length; i++) {
-        if(schet[i]==0&&!isUndefined(array[i])){
-            model_sum+=array[i]
-            if(i!=array.length-1) model_sum+=' '
-        }
-    }
-
-    alert("model is" + model_sum)
-
-    if(model_sum!='') requestURL=requestURL+'models='+model_sum+ '&'
-
-    alert(requestURL)
-    return requestURL
-}
+let newDB=[]
+let flag=-1
 function get_info(e){
     if(e.keyCode==13){
-        let searchInfo = document.getElementById('searchInfo').value
-        let arrayInfo = searchInfo.split(' ')
-        var requestURL = build_url(arrayInfo)
-        var request = new XMLHttpRequest();
-        request.open('GET', requestURL,false);
-        request.send();
-        let DB = request.responseText
-        newDB = JSON.parse(DB).data
-      //  alert(newDB)
+        let sort = document.getElementById("sort-select");
+        var strUser = sort.options[sort.selectedIndex].value;
+     //   alert(strUser)
+        let srt = "Дешевые"
+        let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
+        let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
+        let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
+        let minYearInfo = document.getElementById('minYearInfo').value.toLocaleLowerCase()
+        let maxYearInfo = document.getElementById('maxYearInfo').value.toLocaleLowerCase()
+        let cityInfo = document.getElementById('cityInfo').value.toLocaleLowerCase()
+        if(isUndefined(cityInfo)) cityInfo[0] =cityInfo[0].toUpperCase() + cityInfo.slice(1);
+   //     alert(typeof(cityInfo[0]))
+        if(strUser==="Сначала новые") srt = 'Новые'
+        if(strUser==="Сначала старые") srt = 'Старые'
+        if(strUser==="Сначала дешевые") srt = 'Дешевые'
+        if(strUser==="Сначала дорогие") srt = 'Дорогие'
+        if(strUser==="Сначала большой пробег") srt = 'Большой_пробег'
+        if(strUser==="Сначала маленький пробег") srt = 'Маленький_пробег'
+        var data = JSON.stringify({ 
+            "marksAndModels": [ 
+            { 
+            "mark": markInfo, 
+            "models": [ 
+            modelInfo 
+            ] 
+            } 
+            ] 
+            }); 
+        var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=100'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo + '&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+        var request = new XMLHttpRequest(); 
+        console.log(requestURL) 
+        request.open('GET', requestURL, false); 
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
+        request.send(data); 
+        let DB = request.responseText; 
+      // console.log(DB); 
+        newDB = JSON.parse(DB).data; 
+        console.log(newDB);
     } 
 }
+
+function click_get_info(){
+    let sort = document.getElementById("sort-select");
+    var strUser = sort.options[sort.selectedIndex].value;
+  //  alert(strUser)
+    let srt = "Дешевые"
+    let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
+    let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
+    let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
+    let minYearInfo = document.getElementById('minYearInfo').value.toLocaleLowerCase()
+    let maxYearInfo = document.getElementById('maxYearInfo').value.toLocaleLowerCase()
+    let cityInfo = document.getElementById('cityInfo').value.toLocaleLowerCase()
+    if(isUndefined(cityInfo)) cityInfo[0] =cityInfo[0].toUpperCase() + cityInfo.slice(1);
+    if(strUser==="Сначала новые") srt = 'Новые'
+    if(strUser==="Сначала старые") srt = 'Старые'
+    if(strUser==="Сначала дешевые") srt = 'Дешевые'
+    if(strUser==="Сначала дорогие") srt = 'Дорогие'
+    if(strUser==="Сначала большой пробег") srt = 'Большой_пробег'
+    if(strUser==="Сначала маленький пробег") srt = 'Маленький_пробег'
+    var data = JSON.stringify({ 
+        "marksAndModels": [ 
+        { 
+        "mark": markInfo, 
+        "models": [ 
+        modelInfo 
+        ] 
+        } 
+        ] 
+        }); 
+    var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=100'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+    var request = new XMLHttpRequest(); 
+    console.log(requestURL) 
+    request.open('GET', requestURL, false); 
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
+    request.send(data); 
+    let DB = request.responseText; 
+  // console.log(DB); 
+    newDB = JSON.parse(DB).data; 
+    console.log(newDB);
+}
+
 
 class ProductsTable extends React.Component{
     constructor(){
         super()
         this.state ={
             dataBase:dataBase,
-          //  newData:[{}]
         }
         //////////////////////////////////////////
-     //   this.get_info = this.get_info.bind(this)
-      //  this.addItem = this.addItem.bind(this)
-      //  this.my_init = this.my_init.bind(this)
         this.new_get = this.new_get.bind(this)
         this.refresh = this.refresh.bind(this)
         ////////////////////////////////////////// 
+    }
 
-        /*//////////////////////////////////////////////////
-        for(let key in this.state.dataBase[0]){
-            this.state.newData[0][key] = this.state.dataBase[0][key]
-        }
-        //////////////////////////////////////////
-        for(let index = 1; index < 3; index++){
-            this.state.newData.push(this.state.dataBase[index])
-        }
-        */
-    }
-    /*
-    my_init(){
-        const tmpData = []
-        for(let key in this.state.dataBase[0]){
-            tmpData[0][key] = this.state.dataBase[0][key]
-        }
-        //////////////////////////////////////////
-        for(let index = 1; index < 3; index++){
-            tmpData.push(this.state.dataBase[index])
-        }
-        this.setState({
-            newData:tmpData
-        })
-    }
-    */
     refresh(){
-        if(newDB.length!=2){
+        
             this.setState({
                 dataBase:newDB
             })
-        }
+        
     }
 
     new_get(){
@@ -111,31 +118,41 @@ class ProductsTable extends React.Component{
         })
     }
     
-    /*
-    addItem(){
-        this.setState({
-            dataBase:newDB
-        })
-
-        if(this.state.newData.length<this.state.dataBase.length-3){
-            const addData = []
-            for(let i = 0;i<this.state.newData.length;i++) addData.push(this.state.newData[i])
-            for (let i = 0; i < 3; i++) addData.push(this.state.dataBase[this.state.newData.length+i])
-            this.setState({newData:addData})
-        }
-        alert(this.state.newData.length)
-        alert("newDB len is "+newDB.length)
-        alert("dataBase len is "+ this.state.dataBase.length)
-    }
-    */
-
     render(){
         return(
             <div className="app-style">
                     <div className="search-string">
                         <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="searchInfo" type="text" placeholder="Search..."/>
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="markInfo" type="text" placeholder="Марка"/>
                         </div>
+                        <div className="search-holder">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="modelInfo" type="text" placeholder="Модель"/>
+                        </div>
+                        <div className="search-holder inline">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="minYearInfo" type="text" placeholder="Минимальный год выпуска"/>
+                        </div>
+                        <div className="search-holder">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="maxYearInfo" type="text" placeholder="Максимальный год выпуска"/>
+                        </div>
+                        <div className="search-holder">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="colorInfo" type="text" placeholder="Цвет"/>
+                        </div>
+                        <div className="search-holder">
+                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="cityInfo" type="text" placeholder="Город"/>
+                        </div>
+                        <form className="check-box-zone"action="#">
+                            <ul>
+                                <button onClick={click_get_info} className="label">Отсортировать</button>
+                                    <select id="sort-select">
+                                        <option >Сначала новые</option>
+                                        <option>Сначала старые</option>
+                                        <option>Сначала дешевые</option>
+                                        <option>Сначала дорогие</option>
+                                        <option>Сначала большой пробег</option>
+                                        <option>Сначала маленький пробег</option>
+                                    </select>
+                            </ul>
+                        </form>
                     </div>
                     <div className="showMore-holder">
                             <div /*onClick={this.addItem}*/ className="frame-btn">
@@ -150,7 +167,7 @@ class ProductsTable extends React.Component{
                     </div>
                     <div className="table-style">
                         <div  className="table-style"> 
-                            {this.state.dataBase.map(product => <Product key={product.id} imageUrl={product.imageUrl} watchPlace={product.additionalInfo.watchPlace} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} condition = {product.additionalInfo.condition} transmission={product.additionalInfo.transmission} ptsOwners={product.additionalInfo.ptsOwners} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
+                            {this.state.dataBase.map(product => <Product key={product.id} imageUrl={product.imageUrl} dangerouslyLowPrice={product.dangerouslyLowPrice} dangerouslyHighPrice={product.dangerouslyLowPrice} dangerouslyHighMileage={product.dangerouslyHighMileage} dangerouslyLowMileage={product.dangerouslyLowMileage} city={product.city} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} source={product.source} actualizationTime={product.actualizationTime} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
                         </div>
                     </div>
             </div>
