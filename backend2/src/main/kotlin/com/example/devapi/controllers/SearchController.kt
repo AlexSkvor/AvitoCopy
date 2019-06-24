@@ -5,8 +5,8 @@ import com.example.devapi.controllers.requests.TradeMarksRequest
 import com.example.devapi.database.dao.CarsDao
 import com.example.devapi.controllers.responses.BaseResponse
 import com.example.devapi.utils.*
+import com.google.gson.Gson
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -37,8 +37,14 @@ class SearchController(
                    @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
                    @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>,
                    @RequestParam(value = "filterResellers", required = false, defaultValue = "false") filterResellers: Boolean,
-                   @RequestBody(required = false) tradeMarksRequest: TradeMarksRequest?
+                   @RequestParam(value = "tradeMarksRequest", required = false, defaultValue = "[]") tradeMarksRequest: String
     ): BaseResponse<FrontCar> {
+
+        val tradeMarks = try {
+            Gson().fromJson(tradeMarksRequest, TradeMarksRequest::class.java)
+        } catch (e: Exception) {
+            null
+        }
 
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
                 .map { FrontCar(it) }
@@ -47,7 +53,7 @@ class SearchController(
                 .filter { bodyTypesFilter(it, bodyTypes) }
                 .filter { citiesFilter(it, cities) }
                 .filter { sourcesFilter(it, sources) }
-                .filter { tradeMarksFilter(it, tradeMarksRequest?.marksAndModels) }
+                .filter { tradeMarksFilter(it, tradeMarks?.marksAndModels) }
                 .toList()
                 .filterResellers(filterResellers)
                 .sortedByType(sort)
@@ -81,10 +87,10 @@ class SearchController(
         if (marksAndModels.isNullOrEmpty()) return true
 
         marksAndModels.forEach {
-            if (it.mark.contains(car.tradeMark)) {
+            if (it.mark.contains(car.tradeMark) && car.tradeMark.isNotEmpty()) {
                 if (it.models.isEmpty()) return true
                 it.models.forEach { model ->
-                    if (model.contains(car.model))
+                    if (model.contains(car.model) && car.model.isNotEmpty())
                         return true
                 }
             }
