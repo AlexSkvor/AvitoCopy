@@ -37,7 +37,7 @@ function get_info(e){
             } 
             ] 
             }); 
-        var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=100'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo + '&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+        var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo + '&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
         var request = new XMLHttpRequest(); 
         console.log(requestURL) 
         request.open('GET', requestURL, false); 
@@ -78,7 +78,7 @@ function click_get_info(){
         } 
         ] 
         }); 
-    var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=100'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+    var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
     var request = new XMLHttpRequest(); 
     console.log(requestURL) 
     request.open('GET', requestURL, false); 
