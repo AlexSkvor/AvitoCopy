@@ -4,6 +4,7 @@ import com.example.devapi.database.dao.CarsDao
 import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.database.entities.Dumps
 import com.example.devapi.controllers.responses.BaseResponse
+import com.example.devapi.database.dao.PopularCarsDao
 import com.example.devapi.utils.*
 import com.google.gson.Gson
 import org.springframework.scheduling.annotation.Scheduled
@@ -23,7 +24,8 @@ import java.util.*
 @RequestMapping("/dump")
 class DumpController(
         private val linksRepository: LinksDao,
-        private val carsRepository: CarsDao
+        private val carsRepository: CarsDao,
+        private val popularRepository: PopularCarsDao
 ) {
 
     @GetMapping("/please")
@@ -43,7 +45,8 @@ class DumpController(
     private fun dump(): Int {
         val links = linksRepository.findAll().toList()
         val cars = carsRepository.findAll().toList()
-        val dump = Dumps(cars, links)
+        val populars = popularRepository.findAll().toList()
+        val dump = Dumps(cars, links, populars)
         val file = File("$filesDirectory${Date().time}$fileDump")
         file.writeText(Gson().toJson(dump))
         return cars.size
