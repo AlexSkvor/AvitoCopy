@@ -1,9 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Lora|Roboto:400,500);
+
 .app-style{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 80%;
-    margin-left: 11%;
+    margin-left: 10%;
    
+}
+.banner-holder{
+    display: flex;
+    margin-top: 30px;
+    margin-left:150px;
+}
+
+.app-style .banner-holder .banner-text{
+    display: block;
+    margin-right: 50px;
+    color:white;
+    font-family: "Lora";
 }

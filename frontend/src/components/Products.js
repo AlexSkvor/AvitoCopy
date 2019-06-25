@@ -1,6 +1,48 @@
 import React from "react"
 
+/*
+ { props.dangerouslyLowPrice===true&&
+                        <p className="danger">Warning:подозрительно низкая цена</p>
+                    }
+                    { props.dangerouslyHighPrice===true&&
+                        <p className="danger">Warning:подозрительно высокая цена</p>
+                    }
+                    { props.dangerouslyLowMileage===true&&
+                        <p className="danger">Warning:слишком маленький пробег</p>
+                    }
+                    { props.dangerouslyHighMileage===true&&
+                        <p className="danger">Warning:слишком большой пробег</p>
+                    }
+                    
 
+
+*/
+
+/*
+{
+"id":0,
+"originalUrl":"https://www.avito.ru/mamonovo/avtomobili/mazda_xedos_6_1994_1189590125",
+"imageUrl":"//14.img.avito.st/208x156/5073662014.jpg",
+"tradeMark":"mazda",
+"model":"xedos 6",
+"color":"белый",
+"driveUnit":"передний",
+"price":1000,
+"year":1994,
+"bodyType":"седан",
+"steeringSide":"левый",
+"mileage":350001,
+"comment":"машина после дтп на запчасти есть новая запчасть на сцепление также имеется буфер на продажу фото заднего вида по просьбе могу сбросить(целый)",
+"actualizationTime":"06-24-00-40",
+"source":"Avito",
+"city":"mamonovo",
+"dangerouslyLowPrice":true,
+"dangerouslyHighPrice":false,
+"dangerouslyHighMileage":false,
+"dangerouslyLowMileage":false
+}
+
+*/
 function Product(props){
     return(
         <div className="card-style" >
@@ -15,10 +57,13 @@ function Product(props){
                     <p className="mb-1">Пробег: {props.mileage}</p>
                     <p className="mb-1">Привод: {props.driveUnit}</p>
                     <p className="mb-1">Руль: {props.steeringSide}</p>
-                    <p className="mb-1">Состояние: {props.condition}</p>
-                    <p className="mb-1">Владельцев по ПТС: {props.ptsOwners}</p>
-                    <p className="mb-1">Коробка : {props.transmission}</p>
-                    <p className="mb-1">Место смотра: {props.watchPlace}</p>
+                    <p className="mb-1">Дата обьявления: {props.actualizationTime}</p>
+                    <p className="mb-1">Место смотра: {props.city}</p>
+                    <p>Источник: {props.source}</p>
+                    <p style={{display: props.dangerouslyLowPrice==true ? "intherit" : "none"}} className="danger">Warning:подозрительно низкая цена</p>
+                    <p style={{display: props.dangerouslyHightPrice==true ? "intherit" : "none"}} className="danger">Warning:подозрительно высокая цена</p>
+                    <p style={{display: props.dangerouslyHighMileage==true ? "intherit" : "none"}} className="danger">Warning:подозрительно большой пробег</p>
+                    <p style={{display: props.dangerouslyLowMileage==true ? "intherit" : "none"}} className="danger">Warning:подозрительно маленький пробег</p>
                 </div>
                 <a href="#0" className="text-uppercase  d-inline-block font-weight-medium lts-2px ml-2 mb-2 text-center styled-link">{props.price} ₽</a>
             </div>

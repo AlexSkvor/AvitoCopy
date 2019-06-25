@@ -7,4 +7,6 @@ import "./app-style.css"
 import "./main.css"
 import "./card-style.css"
 import "./showMore-btn.css"
+import "./check-box-zone.css"
+import "./banner.css"
 ReactDOM.render(<App/>,document.getElementById("root"))
