@@ -1,2 +1,7 @@
-const marks = ["hyundai","mazda","peugeot","mercedes-benz","chery","plymouth","byd","saab","луаз","citroen","lifan","газ","зил","lexus","toyota","lincoln","","alfa romeo","acura","great wall","honda","seat","isuzu","proton","cadillac","уаз","bmw","morris","daewoo","lancia","тагаз","mitsubishi","geely","mercury","infiniti","заз","faw","porsche","subaru","haima","jeep","pontiac","chevrolet","volkswagen","daihatsu","chrysler","fiat","bentley","scion","audi","ford","suzuki","kia","iveco","rover","москвич","nissan","smart","ssangyong","opel","volvo","asia","maserati","land rover","раф","skoda","ваз (lada)","mini","renault","jaguar","hummer","datsun","dodge"]
-export default marks
+var requestURL = 'http://84.201.139.189:8080/devapi-2/info/cars/count'
+var request = new XMLHttpRequest();
+request.open('GET', requestURL,false);
+request.send();
+let CB = request.responseText
+let countAuto= JSON.parse(CB).data[0]
+export default countAuto

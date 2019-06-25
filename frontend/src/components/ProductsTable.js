@@ -2,7 +2,7 @@ import React from "react"
 import Product from "./Products"
 import dataBase from "./dataBase"
 import colorBase from "./colorBase"
-import markBase from "./markBase"
+import countAuto from "./markBase"
 import { isUndefined } from "util";
 
 let newDB=[]
@@ -16,9 +16,12 @@ function get_info(e){
         let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
         let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
         let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
+        let minPriceInfo = document.getElementById('minPriceInfo').value.toLocaleLowerCase()
+        let maxPriceInfo = document.getElementById('maxPriceInfo').value.toLocaleLowerCase()
         let minYearInfo = document.getElementById('minYearInfo').value.toLocaleLowerCase()
         let maxYearInfo = document.getElementById('maxYearInfo').value.toLocaleLowerCase()
         let cityInfo = document.getElementById('cityInfo').value.toLocaleLowerCase()
+        let bodyInfo = document.getElementById('bodyInfo').value.toLocaleLowerCase()
         if(isUndefined(cityInfo)) cityInfo[0] =cityInfo[0].toUpperCase() + cityInfo.slice(1);
    //     alert(typeof(cityInfo[0]))
         if(strUser==="Сначала новые") srt = 'Новые'
@@ -27,17 +30,39 @@ function get_info(e){
         if(strUser==="Сначала дорогие") srt = 'Дорогие'
         if(strUser==="Сначала большой пробег") srt = 'Большой_пробег'
         if(strUser==="Сначала маленький пробег") srt = 'Маленький_пробег'
-        var data = JSON.stringify({ 
-            "marksAndModels": [ 
-            { 
-            "mark": markInfo, 
-            "models": [ 
-            modelInfo 
-            ] 
-            } 
-            ] 
-            }); 
-        var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo + '&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+        var data
+        if(markInfo!='' && modelInfo!=''){
+       //     alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark": markInfo,"models": [modelInfo] 
+                } 
+                ] 
+                });
+        }
+        if(markInfo!='' && modelInfo===''){
+         //   alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark": markInfo,"models": [] 
+                } 
+                ] 
+                });
+        }
+        if(markInfo==='' && modelInfo!=''){
+         //   alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark":[],"models": [modelInfo] 
+                } 
+                ] 
+                });
+        }
+
+        var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&minPrice='+minPriceInfo+'&maxPrice='+maxPriceInfo+'&cities='+ cityInfo + '&bodyTypes='+ bodyInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data);  
         var request = new XMLHttpRequest(); 
         console.log(requestURL) 
         request.open('GET', requestURL, false); 
@@ -58,9 +83,12 @@ function click_get_info(){
     let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
     let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
     let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
+    let minPriceInfo = document.getElementById('minPriceInfo').value.toLocaleLowerCase()
+    let maxPriceInfo = document.getElementById('maxPriceInfo').value.toLocaleLowerCase()
     let minYearInfo = document.getElementById('minYearInfo').value.toLocaleLowerCase()
     let maxYearInfo = document.getElementById('maxYearInfo').value.toLocaleLowerCase()
     let cityInfo = document.getElementById('cityInfo').value.toLocaleLowerCase()
+    let bodyInfo = document.getElementById('bodyInfo').value.toLocaleLowerCase()
     if(isUndefined(cityInfo)) cityInfo[0] =cityInfo[0].toUpperCase() + cityInfo.slice(1);
     if(strUser==="Сначала новые") srt = 'Новые'
     if(strUser==="Сначала старые") srt = 'Старые'
@@ -68,17 +96,38 @@ function click_get_info(){
     if(strUser==="Сначала дорогие") srt = 'Дорогие'
     if(strUser==="Сначала большой пробег") srt = 'Большой_пробег'
     if(strUser==="Сначала маленький пробег") srt = 'Маленький_пробег'
-    var data = JSON.stringify({ 
-        "marksAndModels": [ 
-        { 
-        "mark": markInfo, 
-        "models": [ 
-        modelInfo 
-        ] 
-        } 
-        ] 
-        }); 
-    var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&cities='+ cityInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
+    var data
+        if(markInfo!='' && modelInfo!=''){
+            alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark": markInfo,"models": [modelInfo] 
+                } 
+                ] 
+                });
+        }
+        if(markInfo!='' && modelInfo===''){
+            alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark": markInfo,"models": [] 
+                } 
+                ] 
+                });
+        }
+        if(markInfo==='' && modelInfo!=''){
+            alert("mark is"+markInfo + " model is "+modelInfo)
+            var data = JSON.stringify({ 
+                "marksAndModels": [ 
+                { 
+                "mark":[],"models": [modelInfo] 
+                } 
+                ] 
+                });
+        }
+    var requestURL = 'http://84.201.139.189:8080/devapi-2/search/cars?&take=1000&filterResellers=true'+'&minPrice='+minPriceInfo+'&maxPrice='+maxPriceInfo+'&cities='+ cityInfo + '&bodyTypes='+ bodyInfo + '&colors='+ colorInfo + '&sort='+ srt + '&maxYear='+ maxYearInfo +'&minYear='+ minYearInfo + '&tradeMarksRequest=' + encodeURIComponent(data); 
     var request = new XMLHttpRequest(); 
     console.log(requestURL) 
     request.open('GET', requestURL, false); 
@@ -121,25 +170,41 @@ class ProductsTable extends React.Component{
     render(){
         return(
             <div className="app-style">
+                    <div className="banner-holder">
+                        <h1 className="banner-text">{countAuto}+  автомобилей в базе :3</h1>
+                    </div>
                     <div className="search-string">
-                        <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="markInfo" type="text" placeholder="Марка"/>
-                        </div>
-                        <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="modelInfo" type="text" placeholder="Модель"/>
-                        </div>
+                        <ul className="input-list">
+                            <div className="search-holder">
+                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="markInfo" type="text" placeholder="Марка"/>
+                            </div>
+                            <div className="search-holder">
+                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="modelInfo" type="text" placeholder="Модель"/>
+                            </div>
+                            <div className="search-holder">
+                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="colorInfo" type="text" placeholder="Цвет"/>
+                            </div>
+                            <div className="search-holder">
+                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="bodyInfo" type="text" placeholder="Тип кузова"/>
+                            </div>
+                            <div className="search-holder">
+                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="cityInfo" type="text" placeholder="Город"/>
+                            </div>
+                        </ul>
+                        
                         <div className="search-holder inline">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="minYearInfo" type="text" placeholder="Минимальный год выпуска"/>
+                            <input onKeyDown={get_info} autocomplete="off" className="local-width " id="minYearInfo" type="text" placeholder="Минимальный год выпуска"/>
                         </div>
                         <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="maxYearInfo" type="text" placeholder="Максимальный год выпуска"/>
+                            <input onKeyDown={get_info} autocomplete="off" className="local-width" id="maxYearInfo" type="text" placeholder="Максимальный год выпуска"/>
+                        </div> 
+                        <div className="search-holder inline">
+                            <input onKeyDown={get_info} autocomplete="off" className="local-width " id="minPriceInfo" type="text" placeholder="Минимальная цена"/>
                         </div>
                         <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="colorInfo" type="text" placeholder="Цвет"/>
+                            <input onKeyDown={get_info} autocomplete="off" className="local-width" id="maxPriceInfo" type="text" placeholder="Максимальная цена"/>
                         </div>
-                        <div className="search-holder">
-                            <input onKeyDown={get_info} autocomplete="off" className="search__input" id="cityInfo" type="text" placeholder="Город"/>
-                        </div>
+                        
                         <form className="check-box-zone"action="#">
                             <ul>
                                 <button onClick={click_get_info} className="label">Отсортировать</button>
