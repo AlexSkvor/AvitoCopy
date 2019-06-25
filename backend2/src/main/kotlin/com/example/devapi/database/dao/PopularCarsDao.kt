@@ -9,6 +9,12 @@ import org.springframework.transaction.annotation.Transactional
 
 interface PopularCarsDao : CrudRepository<PopularCarEntity, String> {
 
+    @Query("SELECT DISTINCT CITY FROM CITY_INFO", nativeQuery = true)
+    fun getAllCities(): List<String>
+
+    @Query("SELECT COUNT(*) FROM CITY_INFO WHERE LOADED = false", nativeQuery = true)
+    fun countNotLoaded(): Int
+
     @Query(value = "SELECT * FROM CITY_INFO WHERE LOADED = false", nativeQuery = true)
     fun getNonLoadedList(): List<PopularCarEntity>
 
@@ -17,10 +23,12 @@ interface PopularCarsDao : CrudRepository<PopularCarEntity, String> {
     @Query(value = "update PopularCarEntity c set c.loaded = true where c.fullName = :key")
     fun markLoaded(key: String)
 
+    fun getByCityOrderByNumberDesc(city: String): List<PopularCarEntity>
+
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Query(value = "update PopularCarEntity c set c.loaded = false where c.model =''")
-    fun startReload(key: String)
+    fun startReload()
 }
 
 fun PopularCarsDao.getNext(): PopularCarEntity? {

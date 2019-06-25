@@ -4,3 +4,4 @@ const val filesDirectory = "avitoData2\\"
 
 const val fileDump = "dump.txt"
 const val fileLog = filesDirectory + "log.txt"
+const val fileErrorUser = filesDirectory + "fileErrorUser.txt"

@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi.controllers.search
 
 /**
  * Created on 6/22/2019

@@ -86,3 +86,12 @@ val dateFormat: SimpleDateFormat
 
 fun Date.frontFormat(): String =
         SimpleDateFormat("MM-dd-HH-mm").format(this)
+
+fun String.firstUpper(): String =
+        if (this.isEmpty()) this
+        else {
+            val first = this.first()
+            val end = this.substring(1, this.length)
+            first.toUpperCase() + end
+        }
+

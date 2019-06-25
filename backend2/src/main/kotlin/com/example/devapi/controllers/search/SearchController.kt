@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi.controllers.search
 
 import com.example.devapi.controllers.requests.MarkWithModels
 import com.example.devapi.controllers.requests.TradeMarksRequest

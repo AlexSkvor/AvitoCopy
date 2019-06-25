@@ -1,4 +1,4 @@
-package com.example.devapi.controllers
+package com.example.devapi.controllers.search
 
 import com.example.devapi.database.entities.CarEntity
 import com.example.devapi.utils.frontFormat
