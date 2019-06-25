@@ -45,7 +45,6 @@ class YoulaNewLinksLoader(private val repository: LinksDao) {
                 linkFromElement(it) to cityFromElement(it)
             }.distinct()
         } catch (e: Throwable) {
-            e.alsoPrintDebug("YoulaNewLinksLoader")
             listOf()
         }
     }

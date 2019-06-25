@@ -21,14 +21,11 @@ class PopularCarsLoader(
     @Scheduled(fixedRate = 5_000)
     fun loadInfo() {
         randomWait()
-        alsoPrintDebug("getting from repo")
         popularRepository.getNext()?.let { old ->
-            alsoPrintDebug("getting from net")
             try {
                 val url = "https://www.avito.ru/${old.city}/avtomobili/${old.mark}?radius=0"
                 popularRepository.markLoaded(old.fullName)
                 val page = Jsoup.connect(url).get()
-                alsoPrintDebug("got from net")
                 val models = page.body().getElementsByClass("popular-rubricator-row-1iFic")
                 val cars = models.removeGarbage().toCars(old)
 
