@@ -2,5 +2,6 @@ package com.example.devapi.database.entities
 
 data class Dumps(
         val cars: List<CarEntity>,
-        val links: List<LinkEntity>
+        val links: List<LinkEntity>,
+        val populars: List<PopularCarEntity>
 )

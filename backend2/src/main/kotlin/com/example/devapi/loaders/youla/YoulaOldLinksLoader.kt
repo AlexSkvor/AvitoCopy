@@ -2,6 +2,7 @@ package com.example.devapi.loaders.youla
 
 import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.database.entities.LinkEntity
+import com.example.devapi.utils.alsoPrintDebug
 import com.example.devapi.utils.youla
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -13,7 +14,7 @@ import java.util.*
 @Component
 class YoulaOldLinksLoader(private val repository: LinksDao) {
 
-    private var pageNum = 71
+    private var pageNum = 30
 
     @Scheduled(fixedRate = 18000)
     fun loadLinks() {
@@ -34,12 +35,19 @@ class YoulaOldLinksLoader(private val repository: LinksDao) {
     }
 
     private fun getLinks(pageNumber: Int = 1): List<Pair<String, String>> {
-        val page = Jsoup.connect("https://auto.youla.ru/kaliningradskaya-oblast/cars/used/?photo=1&page=$pageNumber").get()
-        val elements: Elements = page.body().getElementsByClass("SerpSnippet_snippet__3O1t2 app_roundedBlockWithShadow__1rh6w")
+        val url = "https://auto.youla.ru/kaliningradskaya-oblast/data/used/?photo=1&page=$pageNumber"
+        return try {
 
-        return elements.map {
-            linkFromElement(it) to cityFromElement(it)
-        }.distinct()
+            val page = Jsoup.connect(url).get()
+            val elements: Elements = page.body().getElementsByClass("SerpSnippet_snippet__3O1t2 app_roundedBlockWithShadow__1rh6w")
+
+            elements.map {
+                linkFromElement(it) to cityFromElement(it)
+            }.distinct()
+        } catch (e: Throwable) {
+            e.alsoPrintDebug("YoulaNewLinksLoader")
+            listOf()
+        }
     }
 
     private fun linkFromElement(element: Element): String =
