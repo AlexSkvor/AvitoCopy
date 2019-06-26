@@ -27,7 +27,7 @@ object ResellersFilter {
                 driveUnit = car.driveUnit,
                 bodyType = car.bodyType,
                 steeringSide = car.steeringSide,
-                mileage = car.mileage
+                mileage = car.mileagePerYear
         )
     }
 

@@ -36,7 +36,7 @@ class DevHelpController {
         instructions += "$version/info/data/sources -> Источники данных <a href = $address/info/data/sources>Пример</a><br>"
         instructions += "$version/help/requests/popular/cars -> Самолетики <a href = $address/help/requests/popular/cars>Пример</a><br>"
 
-        instructions += "$version/search/data -> сложный запрос, <a href = $address/help/requests/search/data>Подробности</a><br>"
+        instructions += "$version/search/cars -> сложный запрос, <a href = $address/help/requests/search/cars>Подробности</a><br>"
         return instructions
     }
 
@@ -72,85 +72,73 @@ class DevHelpController {
                 "$tab Описание(Начинать выдачу мошин с номера skip+1)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(0)<br>" +
-                "$tab <a href = $address/search/data?skip=20>Пример</a><br>"
+                "$tab <a href = $address/search/cars?skip=20>Пример</a><br>"
 
         instructions += "${bt}take: <br>$tab Валидация(Целое положительное число)<br>" +
                 "$tab Описание(Выдать в ответе take машин)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(3)<br>" +
-                "$tab <a href = $address/search/data?take=20>Пример</a><br>"
+                "$tab <a href = $address/search/cars?take=20>Пример</a><br>"
 
-        instructions += "${bt}colors: <br>$tab Валидация(один/несколько из <a href = $address/info/data/colors>Список</a> или не задан)<br>" +
+        instructions += "${bt}colors: <br>$tab Валидация(один/несколько из <a href = $address/info/cars/colors>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины указаных цветов)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
-                "$tab <a href = $address/search/data?colors=чёрный&colors=розовый>Пример</a><br>"
+                "$tab <a href = $address/search/cars?colors=чёрный&colors=розовый>Пример</a><br>"
 
-        instructions += "${bt}bodyTypes: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/data/bodyTypes>Список</a> или не задан)<br>" +
+        instructions += "${bt}bodyTypes: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/cars/bodyTypes>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины, имеющие один из заданных типов кузова)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
-                "$tab <a href = $address/search/data?bodyTypes=купе&bodyTypes=микроавтобус>Пример</a><br>"
+                "$tab <a href = $address/search/cars?bodyTypes=купе&bodyTypes=микроавтобус>Пример</a><br>"
 
-        instructions += "${bt}sort: <br>$tab Валидация(один из <a href = $address/info/data/sorts>Список</a> или не задан)<br>" +
+        instructions += "${bt}sort: <br>$tab Валидация(один из <a href = $address/info/cars/sorts>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины в указанном порядке)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(Дешевые)<br>" +
-                "$tab <a href = $address/search/data?sort=Старые>Пример</a><br>"
+                "$tab <a href = $address/search/cars?sort=Старые>Пример</a><br>"
 
         instructions += "${bt}minPrice: <br>$tab Валидация(Целое число)<br>" +
                 "$tab Описание(Выдавать в ответе машины ценой большей или равной minPrice)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(0)<br>" +
-                "$tab <a href = $address/search/data?minPrice=500000>Пример</a><br>"
+                "$tab <a href = $address/search/cars?minPrice=500000>Пример</a><br>"
 
         instructions += "${bt}maxPrice: <br>$tab Валидация(Целое число)<br>" +
                 "$tab Описание(Выдавать в ответе машины ценой меньшей или равной maxPrice)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(99999999)<br>" +
-                "$tab <a href = $address/search/data?maxPrice=500000>Пример</a><br>"
+                "$tab <a href = $address/search/cars?maxPrice=500000>Пример</a><br>"
 
         instructions += "${bt}minYear: <br>$tab Валидация(Целое число)<br>" +
                 "$tab Описание(Выдавать в ответе машины, выпущенные не раньше minYear)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(0)<br>" +
-                "$tab <a href = $address/search/data?minYear=2018>Пример</a><br>"
+                "$tab <a href = $address/search/cars?minYear=2018>Пример</a><br>"
 
         instructions += "${bt}maxYear: <br>$tab Валидация(Целое число)<br>" +
                 "$tab Описание(Выдавать в ответе машины, выпущенные не позжу maxYear)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(999999)<br>" +
-                "$tab <a href = $address/search/data?maxYear=2000>Пример</a><br>"
+                "$tab <a href = $address/search/cars?maxYear=2000>Пример</a><br>"
 
-        instructions += "${bt}dangerMileage: <br>$tab Валидация(Целое число от 0 до 100)<br>" +
-                "$tab На какой процент должно отличаться значение поля Пробег, чтобы был выставлен флаг ОПАСНО, НИЗКИЙ/ВЫСОКИЙ пробег (процент от среднего значения по запросу)<br>" +
-                "$tab Обязательный(НЕТ)<br>" +
-                "$tab По умолчанию(50)<br>" +
-                "$tab <a href = $address/search/data?dangerMileage=0>Пример</a><br>"
-
-        instructions += "${bt}dangerPrice: <br>$tab Валидация(Целое число от 0 до 100)<br>" +
-                "$tab На какой процент должно отличаться значение поля Цена, чтобы был выставлен флаг ОПАСНО, НИЗКАЯ/ВЫСОКАЯ ценв (процент от среднего значения по запросу)<br>" +
-                "$tab Обязательный(НЕТ)<br>" +
-                "$tab По умолчанию(50)<br>" +
-                "$tab <a href = $address/search/data?dangerPrice=0>Пример</a><br>"
-
-        instructions += "${bt}cities: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/data/cities>Список</a> или не задан)<br>" +
+        instructions += "${bt}cities: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/cars/cities>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины, продающиеся в одном из городов списка)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
-                "$tab <a href = $address/search/data?cities=Калининград>Пример</a><br>"
+                "$tab <a href = $address/search/cars?cities=Калининград>Пример</a><br>"
 
-        instructions += "${bt}sources: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/data/sources>Список</a> или не задан)<br>" +
+        instructions += "${bt}sources: <br>$tab Валидация(один/несколько несколько из <a href = $address/info/cars/sources>Список</a> или не задан)<br>" +
                 "$tab Описание(Выдавать в ответе машины, сведения о которых получены из указанных источников)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(не задан)<br>" +
-                "$tab <a href = $address/search/data?sources=Youla>Пример</a><br>"
+                "$tab <a href = $address/search/cars?sources=Youla>Пример</a><br>"
 
         instructions += "${bt}filterResellers: <br>$tab Валидация(true/false/не задан)<br>" +
                 "$tab Описание(Если задан true, отфильтрует перекупов)<br>" +
                 "$tab Обязательный(НЕТ)<br>" +
                 "$tab По умолчанию(false)<br>" +
-                "$tab <a href = $address/search/data?filterResellers=true&take=1000>Пример</a><br>"
+                "$tab <a href = $address/search/cars?filterResellers=true&take=1000>Пример</a><br>"
 
         instructions += "<br><br>${bt}Тело запроса: <br>$tab Валидация(должен иметь вид {\"marksAndModels\" : [{\"mark\":\"audi\", \"models\":[\"a3\",\"a7\"]}, {\"mark\":\"reanault\", \"models\":[\"logan\"]}]} или не задан)<br>" +
                 "$tab Описание(Если задано, то выдача будет отфильтрована по указанным маркам и соответствующим им моделям)<br>" +

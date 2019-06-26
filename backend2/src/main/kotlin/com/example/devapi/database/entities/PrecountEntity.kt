@@ -6,14 +6,11 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "CITY_INFO")
-data class PopularCarEntity(
+@Table(name = "PRECOUNT")
+class PrecountEntity(
         @Id
         @Column(name = "FULL_NAME", nullable = false, unique = true, length = 128)
         val fullName: String = "",
-
-        @Column(name = "CITY", nullable = false)
-        val city: String = "",
 
         @Column(name = "MARK", nullable = false)
         var mark: String = "",
@@ -21,9 +18,12 @@ data class PopularCarEntity(
         @Column(name = "MODEL", nullable = false)
         val model: String = "",
 
+        @Column(name = "YEAR", nullable = false)
+        val year: Int = 0,
+
         @Column(name = "NUMBER", nullable = false)
         val number: Int = 0,
 
-        @Column(name = "LOADED", nullable = false)
-        val loaded: Boolean = false
+        @Column(name = "MEDIAN_PRICE", nullable = false)
+        val medianPrice: Int = 0
 )
