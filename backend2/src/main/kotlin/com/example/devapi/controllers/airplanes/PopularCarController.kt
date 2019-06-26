@@ -68,7 +68,7 @@ class PopularCarController(
         if (popularCarsRepository.getAllCities().contains(city))
             throw ArgumentException("Город уже добавлен в систему!")
 
-        val url = "https://www.avito.ru/$city/avtomobili/audi?radius=0"
+        val url = "https://www.avito.ru/$city/avtomobili?radius=0"
 
         try {
             Jsoup.connect(url).get()
