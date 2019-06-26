@@ -2,7 +2,6 @@ package com.example.devapi.loaders.youla
 
 import com.example.devapi.database.dao.LinksDao
 import com.example.devapi.database.entities.LinkEntity
-import com.example.devapi.utils.alsoPrintDebug
 import com.example.devapi.utils.youla
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element

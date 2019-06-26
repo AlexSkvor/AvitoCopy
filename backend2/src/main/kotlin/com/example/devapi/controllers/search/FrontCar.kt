@@ -17,21 +17,18 @@ data class FrontCar(
         val color: String = "",
         val driveUnit: String = "",
         val price: Int = -1,
+        val medianPrice: Int = -1,
         val year: Int = -1,
         val bodyType: String = "",
         val steeringSide: String = "",
-        val mileage: Int = -1,
+        val mileagePerYear: Int = -1,
         val comment: String,
         val actualizationTime: String,
         val source: String,
-        val city: String,
-
-        var dangerouslyLowPrice: Boolean = false,
-        var dangerouslyHighPrice: Boolean = false,
-        var dangerouslyHighMileage: Boolean = false,
-        var dangerouslyLowMileage: Boolean = false
+        val totalMileage: Int = -1,
+        val city: String
 ) {
-    constructor(entity: CarEntity) : this(
+    constructor(entity: CarEntity, medianPrice: Int) : this(
             originalUrl = entity.originalUrl,
             imageUrl = entity.imageUrl,
             tradeMark = entity.tradeMark,
@@ -42,12 +39,20 @@ data class FrontCar(
             year = entity.year,
             bodyType = entity.bodyType,
             steeringSide = entity.steeringSide,
-            mileage = entity.mileage,
+            mileagePerYear = medianMileage(entity.mileage, entity.year),
             comment = entity.comment,
             actualizationTime = entity.actualizationTime.frontFormat(),
             source = entity.source,
-            city = entity.city
+            city = entity.city,
+            medianPrice = medianPrice,
+            totalMileage = entity.mileage
     )
+
+    companion object {
+        private fun medianMileage(mileage: Int, year: Int): Int =
+                if (year == 2019) mileage
+                else mileage / (2019 - year)
+    }
 }
 
 fun Array<FrontCar>.setIds() {
@@ -55,21 +60,5 @@ fun Array<FrontCar>.setIds() {
     this.forEach {
         it.id = iter
         iter++
-    }
-}
-
-fun Array<FrontCar>.setDangerouslyMileageFlags(danger: Int, middle: Int) {
-    val m = if (middle == 0) 1L else middle.toLong()
-    this.forEach {
-        if (it.mileage * 100 / m - 100 > danger) it.dangerouslyHighMileage = true
-        if (it.mileage * 100 / m - 100 < -danger) it.dangerouslyLowMileage = true
-    }
-}
-
-fun Array<FrontCar>.setDangerouslyPriceFlags(danger: Int, middle: Int) {
-    val m = if (middle == 0) 1L else middle.toLong()
-    this.forEach {
-        if (it.price * 100 / m - 100 > danger) it.dangerouslyHighPrice = true
-        if (it.price * 100 / m - 100 < -danger) it.dangerouslyLowPrice = true
     }
 }

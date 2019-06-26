@@ -21,7 +21,8 @@ import kotlin.random.Random
 @Component
 class AvitoCarsLoader(
         private val carsRepository: CarsDao,
-        private val linksRepository: LinksDao
+        private val linksRepository: LinksDao,
+        private val precounter: PrecountDao
 ) {
 
     @Scheduled(fixedRate = 5000, initialDelay = 30_000)
@@ -34,6 +35,7 @@ class AvitoCarsLoader(
         if (car != null) {
             loggedTry {
                 carsRepository.insertReplace(car)
+                precounter.updateWith(car)
                 linksRepository.replace(link.copy(lastCheck = Date(), loaded = true))
             }
         } else {

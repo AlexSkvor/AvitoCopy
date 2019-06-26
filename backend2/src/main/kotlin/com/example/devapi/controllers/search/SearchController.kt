@@ -4,6 +4,8 @@ import com.example.devapi.controllers.requests.MarkWithModels
 import com.example.devapi.controllers.requests.TradeMarksRequest
 import com.example.devapi.database.dao.CarsDao
 import com.example.devapi.controllers.responses.BaseResponse
+import com.example.devapi.database.dao.PrecountDao
+import com.example.devapi.database.dao.getPrice
 import com.example.devapi.utils.*
 import com.google.gson.Gson
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/search")
 class SearchController(
-        private val carsRepository: CarsDao
+        private val carsRepository: CarsDao,
+        private val precounter: PrecountDao
 ) {
 
     @GetMapping("/cars")
@@ -32,8 +35,6 @@ class SearchController(
                    @RequestParam(value = "maxPrice", required = false, defaultValue = "99999999") maxPrice: Int,
                    @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
                    @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int,
-                   @RequestParam(value = "dangerMileage", required = false, defaultValue = "50") dangerMileage: Int,
-                   @RequestParam(value = "dangerPrice", required = false, defaultValue = "50") dangerPrice: Int,
                    @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
                    @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>,
                    @RequestParam(value = "filterResellers", required = false, defaultValue = "false") filterResellers: Boolean,
@@ -47,7 +48,7 @@ class SearchController(
         }
 
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
-                .map { FrontCar(it) }
+                .map { FrontCar(it, precounter.getPrice(it)) }
                 .asSequence()
                 .filter { colorsFilter(it, colors) }
                 .filter { bodyTypesFilter(it, bodyTypes) }
@@ -58,13 +59,10 @@ class SearchController(
                 .filterResellers(filterResellers)
                 .sortedByType(sort)
 
-        val (middlePrice, middleMileage) = middleCostAndMileage(cars)
         val data = cars.withSkipTake(skip, take).toTypedArray()
         data.setIds()
-        data.setDangerouslyMileageFlags(dangerMileage, middleMileage)
-        data.setDangerouslyPriceFlags(dangerPrice, middlePrice)
 
-        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data, medianCost = middlePrice, medianMileage = middleMileage)
+        return BaseResponse(STATUS_SUCCESS, CODE_SUCCESS, data)
     }
 
     private fun colorsFilter(car: FrontCar, colors: Array<String>): Boolean {
@@ -101,26 +99,14 @@ class SearchController(
     private fun List<FrontCar>.filterResellers(filter: Boolean): List<FrontCar> =
             if (filter) ResellersFilter.filter(this) else this
 
-    private fun middleCostAndMileage(cars: List<FrontCar>): Pair<Int, Int> {
-        if (cars.isEmpty()) return Pair(1, 1)
-        var cost = 1
-        var mileage = 1
-        cars.forEach {
-            cost += it.price
-            mileage += it.mileage
-        }
-
-        return Pair(cost / cars.size, mileage / cars.size)
-    }
-
     private fun List<FrontCar>.sortedByType(sort: String): List<FrontCar> =
             when (sort) {
                 "Старые" -> this.toMutableList().sortedBy { it.year }
                 "Новые" -> this.toMutableList().sortedByDescending { it.year }
                 "Дешевые" -> this.toMutableList().sortedBy { it.price }
                 "Дорогие" -> this.toMutableList().sortedByDescending { it.price }
-                "Большой_пробег" -> this.toMutableList().sortedByDescending { it.mileage }
-                "Маленький_пробег" -> this.toMutableList().sortedBy { it.mileage }
+                "Большой_пробег" -> this.toMutableList().sortedByDescending { it.mileagePerYear }
+                "Маленький_пробег" -> this.toMutableList().sortedBy { it.mileagePerYear }
                 else -> this.toMutableList().sortedBy { it.price }
             }
 }
