@@ -64,7 +64,7 @@ class PopularCarsLoader(
 
     private fun randomWait() {
         try {
-            Thread.sleep(Random.nextLong(1, 10000))
+            Thread.sleep(Random.nextLong(1, 3_000))
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }

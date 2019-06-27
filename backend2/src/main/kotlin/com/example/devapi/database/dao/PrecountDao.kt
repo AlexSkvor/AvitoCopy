@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface PrecountDao : CrudRepository<PrecountEntity, String> {
 
-    fun getByMarkAndModelAndYear(mark: String, model: String, year: Int): List<PrecountEntity>
+    fun getByFullName(fullName: String): PrecountEntity?
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -20,8 +20,8 @@ interface PrecountDao : CrudRepository<PrecountEntity, String> {
 
 fun PrecountDao.updateWith(car: CarEntity) {
     if (car.tradeMark.isBlank() && car.model.isBlank() && car.year == -1) return
-    val oldList = getByMarkAndModelAndYear(car.tradeMark, car.model, car.year)
-    if (oldList.isEmpty()) {
+    val old = getByFullName(car.tradeMark + car.model + car.year)
+    if (old == null) {
         val newPrecount = PrecountEntity(
                 fullName = car.tradeMark + car.model + car.year,
                 mark = car.tradeMark,
@@ -32,7 +32,6 @@ fun PrecountDao.updateWith(car: CarEntity) {
         )
         save(newPrecount)
     } else {
-        val old = oldList.first()
         val oldPrice = old.medianPrice * old.number
         val newPrice = (oldPrice + car.price) / (old.number + 1)
         updatePriceAndNumber(full = old.fullName, newNumber = old.number + 1, newPrice = newPrice)
@@ -41,7 +40,6 @@ fun PrecountDao.updateWith(car: CarEntity) {
 
 fun PrecountDao.getPrice(car: CarEntity): Int {
     if (car.tradeMark.isBlank() && car.model.isBlank() && car.year == -1) return -1
-    val list = getByMarkAndModelAndYear(car.tradeMark, car.model, car.year)
-    return if (list.isEmpty()) -1
-    else list.first().medianPrice
+    val entity = getByFullName(car.tradeMark + car.model + car.year)
+    return entity?.medianPrice ?: -1
 }

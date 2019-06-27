@@ -9,6 +9,8 @@ import com.example.devapi.database.dao.getPrice
 import com.example.devapi.utils.*
 import com.google.gson.Gson
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -24,6 +26,24 @@ class SearchController(
         private val carsRepository: CarsDao,
         private val precounter: PrecountDao
 ) {
+
+    @PostMapping("/cars/mobile")
+    fun searchCarsMobile(@RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
+                         @RequestParam(value = "take", required = false, defaultValue = "20") take: Int,
+                         @RequestParam(value = "colors", required = false, defaultValue = "") colors: Array<String>,
+                         @RequestParam(value = "bodyTypes", required = false, defaultValue = "") bodyTypes: Array<String>,
+                         @RequestParam(value = "sort", required = false, defaultValue = "Дешевые") sort: String,
+                         @RequestParam(value = "minPrice", required = false, defaultValue = "0") minPrice: Int,
+                         @RequestParam(value = "maxPrice", required = false, defaultValue = "99999999") maxPrice: Int,
+                         @RequestParam(value = "minYear", required = false, defaultValue = "0") minYear: Int,
+                         @RequestParam(value = "maxYear", required = false, defaultValue = "999999") maxYear: Int,
+                         @RequestParam(value = "cities", required = false, defaultValue = "") cities: Array<String>,
+                         @RequestParam(value = "sources", required = false, defaultValue = "") sources: Array<String>,
+                         @RequestParam(value = "filterResellers", required = false, defaultValue = "false") filterResellers: Boolean,
+                         @RequestBody(required = true) tradeMarksRequest: TradeMarksRequest
+    ): BaseResponse<FrontCar> {
+        return answer(skip, take, colors, bodyTypes, sort, minPrice, maxPrice, minYear, maxYear, cities, sources, filterResellers, tradeMarksRequest)
+    }
 
     @GetMapping("/cars")
     fun searchCars(@RequestParam(value = "skip", required = false, defaultValue = "0") skip: Int,
@@ -47,6 +67,23 @@ class SearchController(
             null
         }
 
+        return answer(skip, take, colors, bodyTypes, sort, minPrice, maxPrice, minYear, maxYear, cities, sources, filterResellers, tradeMarks)
+    }
+
+    private fun answer(skip: Int,
+                       take: Int,
+                       colors: Array<String>,
+                       bodyTypes: Array<String>,
+                       sort: String,
+                       minPrice: Int,
+                       maxPrice: Int,
+                       minYear: Int,
+                       maxYear: Int,
+                       cities: Array<String>,
+                       sources: Array<String>,
+                       filterResellers: Boolean,
+                       tradeMarks: TradeMarksRequest?
+    ): BaseResponse<FrontCar> {
         val cars = carsRepository.getAllByYearIsBetweenAndPriceIsBetweenOrderByPrice(minYear, maxYear, minPrice, maxPrice)
                 .map { FrontCar(it, precounter.getPrice(it)) }
                 .asSequence()
