@@ -4,17 +4,41 @@ import dataBase from "./dataBase"
 import colorBase from "./colorBase"
 import countAuto from "./markBase"
 import { isUndefined } from "util";
-
+import allmarks from "./allmarks"
+import Opt from "./Option"
 let newDB=[]
+let modelsBase = []
 let flag=-1
+
+function get_model(){
+    modelsBase=[]
+    let mark = document.getElementById("mark-select")
+    let markInfo = mark.options[mark.selectedIndex].value;
+    var requestURL = 'http://84.201.139.189:8080/devapi-2/info/cars/models?tradeMark='+ markInfo
+    var request = new XMLHttpRequest();
+    request.open('GET', requestURL,false);
+    request.send();
+    let MB = request.responseText
+    let localModels = JSON.parse(MB).data
+    for (let i = 0; i < localModels.length; i++) {
+        let tmp = {name:localModels[i]}
+        modelsBase.push(tmp)
+    }
+}
 function get_info(e){
     if(e.keyCode==13){
         let sort = document.getElementById("sort-select");
         var strUser = sort.options[sort.selectedIndex].value;
+        let mark = document.getElementById("mark-select")
+        let markInfo = mark.options[mark.selectedIndex].value;
+        let model = document.getElementById("model-select")
+        let modelInfo = model.options[model.selectedIndex].value;
+        if(markInfo=="Марка") markInfo=""
+        if(modelInfo=="Модель") modelInfo=""
      //   alert(strUser)
         let srt = "Дешевые"
-        let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
-        let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
+       // let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
+     //   let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
         let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
         let minPriceInfo = document.getElementById('minPriceInfo').value.toLocaleLowerCase()
         let maxPriceInfo = document.getElementById('maxPriceInfo').value.toLocaleLowerCase()
@@ -78,10 +102,16 @@ function get_info(e){
 function click_get_info(){
     let sort = document.getElementById("sort-select");
     var strUser = sort.options[sort.selectedIndex].value;
+    let mark = document.getElementById("mark-select")
+    let markInfo = mark.options[mark.selectedIndex].value;
+    let model = document.getElementById("model-select")
+    let modelInfo = model.options[model.selectedIndex].value;
+    if(markInfo=="Марка") markInfo=""
+    if(modelInfo=="Модель") modelInfo=""
   //  alert(strUser)
     let srt = "Дешевые"
-    let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
-    let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
+  //let markInfo = document.getElementById('markInfo').value.toLocaleLowerCase()
+  //let modelInfo = document.getElementById('modelInfo').value.toLocaleLowerCase()
     let colorInfo = document.getElementById('colorInfo').value.toLocaleLowerCase()
     let minPriceInfo = document.getElementById('minPriceInfo').value.toLocaleLowerCase()
     let maxPriceInfo = document.getElementById('maxPriceInfo').value.toLocaleLowerCase()
@@ -98,7 +128,7 @@ function click_get_info(){
     if(strUser==="Сначала маленький пробег") srt = 'Маленький_пробег'
     var data
         if(markInfo!='' && modelInfo!=''){
-            alert("mark is"+markInfo + " model is "+modelInfo)
+         //   alert("mark is"+markInfo + " model is "+modelInfo)
             var data = JSON.stringify({ 
                 "marksAndModels": [ 
                 { 
@@ -108,7 +138,7 @@ function click_get_info(){
                 });
         }
         if(markInfo!='' && modelInfo===''){
-            alert("mark is"+markInfo + " model is "+modelInfo)
+          //  alert("mark is"+markInfo + " model is "+modelInfo)
             var data = JSON.stringify({ 
                 "marksAndModels": [ 
                 { 
@@ -118,7 +148,7 @@ function click_get_info(){
                 });
         }
         if(markInfo==='' && modelInfo!=''){
-            alert("mark is"+markInfo + " model is "+modelInfo)
+          //  alert("mark is"+markInfo + " model is "+modelInfo)
             var data = JSON.stringify({ 
                 "marksAndModels": [ 
                 { 
@@ -145,6 +175,7 @@ class ProductsTable extends React.Component{
         super()
         this.state ={
             dataBase:dataBase,
+            models:[{name:""}]
         }
         //////////////////////////////////////////
         this.new_get = this.new_get.bind(this)
@@ -153,17 +184,27 @@ class ProductsTable extends React.Component{
     }
 
     refresh(){
-        
             this.setState({
-                dataBase:newDB
+                dataBase:newDB,
+                models:modelsBase
             })
         
     }
 
     new_get(){
-        get_info()
+        get_model()
+     //   get_info()
         this.setState({
-            dataBase:newDB
+            dataBase:newDB,
+            models:modelsBase
+        })
+    }
+
+    new_new_get(){
+        click_get_info()
+        this.setState({
+            dataBase:newDB,
+            models:modelsBase
         })
     }
     
@@ -175,12 +216,19 @@ class ProductsTable extends React.Component{
                     </div>
                     <div className="search-string">
                         <ul className="input-list">
-                            <div className="search-holder">
-                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="markInfo" type="text" placeholder="Марка"/>
-                            </div>
-                            <div className="search-holder">
-                                <input onKeyDown={get_info} autocomplete="off" className="search__input" id="modelInfo" type="text" placeholder="Модель"/>
-                            </div>
+                            <form className="check-box-zone-2"action="#">
+                                <ul>
+                                        <button onClick={this.new_get} className="label">Выбрать</button>
+                                        <select id="mark-select">
+                                            <option >Марка</option>
+                                            {allmarks.map(mark => <Opt name={mark.name}/>)}
+                                        </select>
+                                        <select id="model-select">
+                                            <option >Модель</option>
+                                            {this.state.models.map(model => <Opt name={model.name}/>)}
+                                        </select>
+                                </ul>
+                            </form>
                             <div className="search-holder">
                                 <input onKeyDown={get_info} autocomplete="off" className="search__input" id="colorInfo" type="text" placeholder="Цвет"/>
                             </div>
@@ -232,7 +280,7 @@ class ProductsTable extends React.Component{
                     </div>
                     <div className="table-style">
                         <div  className="table-style"> 
-                            {this.state.dataBase.map(product => <Product key={product.id} imageUrl={product.imageUrl} dangerouslyLowPrice={product.dangerouslyLowPrice} dangerouslyHighPrice={product.dangerouslyLowPrice} dangerouslyHighMileage={product.dangerouslyHighMileage} dangerouslyLowMileage={product.dangerouslyLowMileage} city={product.city} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} source={product.source} actualizationTime={product.actualizationTime} steeringSide={product.steeringSide} mileage = {product.mileage} /> )}
+                            {this.state.dataBase.map(product => <Product key={product.id} totalMileage={product.totalMileage} imageUrl={product.imageUrl} medianPrice={product.medianPrice} mileagePerYear={product.mileagePerYear}  city={product.city} tradeMark={product.tradeMark} model={product.model} color={product.color}  price={product.price} year={product.year} bodyType={product.bodyType} driveUnit={product.driveUnit} source={product.source} actualizationTime={product.actualizationTime} steeringSide={product.steeringSide} totalMileage= {product.totalMileage} /> )}
                         </div>
                     </div>
             </div>

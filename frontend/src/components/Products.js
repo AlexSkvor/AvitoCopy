@@ -54,16 +54,18 @@ function Product(props){
                     <p className="mb-1">Цвет: {props.color}</p>
                     <p className="mb-1">Кузов: {props.bodyType}</p>
                     <p className="mb-1">Год: {props.year}</p>
-                    <p className="mb-1">Пробег: {props.mileage}</p>
+                    <p className="mb-1">Пробег: {props.totalMileage}</p>
                     <p className="mb-1">Привод: {props.driveUnit}</p>
                     <p className="mb-1">Руль: {props.steeringSide}</p>
+                    <p className="mb-1">Пробег: {props.totalMileage} км</p>
                     <p className="mb-1">Дата обьявления: {props.actualizationTime}</p>
                     <p className="mb-1">Место смотра: {props.city}</p>
+                    
                     <p>Источник: {props.source}</p>
-                    <p style={{display: props.dangerouslyLowPrice==true ? "intherit" : "none"}} className="danger">Warning:подозрительно низкая цена</p>
-                    <p style={{display: props.dangerouslyHightPrice==true ? "intherit" : "none"}} className="danger">Warning:подозрительно высокая цена</p>
-                    <p style={{display: props.dangerouslyHighMileage==true ? "intherit" : "none"}} className="danger">Warning:подозрительно большой пробег</p>
-                    <p style={{display: props.dangerouslyLowMileage==true ? "intherit" : "none"}} className="danger">Warning:подозрительно маленький пробег</p>
+                    <p style={{display: Math.abs((props.price*100)/props.medianPrice-100)>40 && props.medianPrice> props.price ? "intherit" : "none"}} className="danger">Warning: подозрительно низкая цена</p>
+                    <p style={{display: Math.abs((props.price*100)/props.medianPrice-100)>40 && props.medianPrice< props.price ? "intherit" : "none"}} className="danger">Warning: завышенная цена</p>
+                    <p style={{display: props.mileagePerYear>20000 ? "intherit" : "none"}} className="danger">Warning: подозрительно большой пробег</p>
+                    <p style={{display: props.mileagePerYear<10000  ? "intherit" : "none"}} className="danger">Warning: подозрительно маленький пробег</p>
                 </div>
                 <a href="#0" className="text-uppercase  d-inline-block font-weight-medium lts-2px ml-2 mb-2 text-center styled-link">{props.price} ₽</a>
             </div>
